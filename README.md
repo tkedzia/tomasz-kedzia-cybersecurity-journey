@@ -1,44 +1,27 @@
-# tomasz-kedzia-cybersecurity-journey
-My cybersecurity learning journey: labs, write-ups, projects, notes and practical exercises in offensive and defensive security.
-# Tomasz Kedzia - Cybersecurity Portfolio
+# Tomasz Kedzia | Cybersecurity Learning Journey
 
-Repository documenting my cybersecurity learning journey.
+This repository documents my cybersecurity learning journey through hands-on labs, security projects, write-ups, notes, and practical exercises.
 
-## Areas of interest
+## Areas of Interest
 
-- SOC & Threat Detection
 - Web Application Security
+- SOC & Threat Detection
 - Active Directory
 - Cloud Security
 - Digital Forensics
 
-## Portfolio
-
-- Writeups
-- Home Lab
-- Security Projects
-- Notes
-- CTF Solutions
-
-## Current roadmap
-
-# Cybersecurity Learning Journey
-
-This repository documents my hands-on cybersecurity learning path, including labs, notes, write-ups, and projects.
-
-## Roadmap
+## Learning Roadmap
 
 ### 1. Build a Lab
 - Kali Linux
-- NPM
 - OWASP Juice Shop
+- Local security testing environment
 
 ### 2. Learn Web Fundamentals
-- HTTP/HTTPS
+- HTTP / HTTPS
 - Cookies & Sessions
 - OSI Model
 - Chrome DevTools
-- Tamper Dev
 
 ### 3. Understand Security Concepts
 - CVE
@@ -54,8 +37,8 @@ This repository documents my hands-on cybersecurity learning path, including lab
 
 ### 5. Security Testing
 - OWASP ZAP
-- Burp Suite (later)
-- Web application assessment
+- Burp Suite
+- Web Application Assessment
 
 ### 6. Explore Cybersecurity Roles
 - SOC Analyst
@@ -63,7 +46,7 @@ This repository documents my hands-on cybersecurity learning path, including lab
 - Security Engineer
 - Cloud Security Engineer
 - Incident Responder
-- AppSec Engineer
+- Application Security Engineer
 
 ### 7. Security Frameworks
 - NIST CSF
@@ -81,3 +64,22 @@ This repository documents my hands-on cybersecurity learning path, including lab
 - Threats
 - Mitigations
 - OWASP Threat Modeling
+
+## Repository Structure
+
+```text
+01-lab-setup/
+02-web-fundamentals/
+03-security-concepts/
+04-owasp-top10/
+05-security-testing/
+06-career-paths/
+07-frameworks/
+08-secure-sdlc/
+09-threat-modeling/
+```
+
+## Goal
+
+Build practical cybersecurity skills, document lessons learned, and create a portfolio demonstrating continuous growth and hands-on experience.
+``
