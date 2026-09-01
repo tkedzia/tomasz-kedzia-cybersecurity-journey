@@ -1,4 +1,4 @@
-# Challenge: Outdated ALlowlist
+# Challenge: Outdated Allowlist
 
 ## Objective
 
