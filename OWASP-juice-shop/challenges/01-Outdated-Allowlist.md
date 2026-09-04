@@ -14,3 +14,16 @@ Using Dev Tools search thru the app code to find "redirect", "crypto" etc key wo
 
 ## Lessons Learned
 Searching thru the entire app code ctr+shift+f
+
+# Coding Challenge: Related to Outdated Allowlist
+
+## Objective
+Fix the code with crypto urls kept in Redirect Allow list set
+
+## Solution
+Delete the crypto urls from the Redirect Allow list set
+
+## Lessons Learned
+<img width="877" height="502" alt="image" src="https://github.com/user-attachments/assets/0793524f-7cbc-4ab1-b303-d344c5fb412e" />
+
+
