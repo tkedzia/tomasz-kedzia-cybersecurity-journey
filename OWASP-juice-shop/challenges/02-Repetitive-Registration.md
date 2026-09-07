@@ -30,7 +30,7 @@ Data Corruption & Logic Flaws: Malformed or out-of-range input can disrupt busin
 
 ## Objective
 
-NO CODEING CHALLANGE
+NO CODING CHALLANGE
 
 ## Solution
 
