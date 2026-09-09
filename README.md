@@ -65,20 +65,6 @@ This repository documents my cybersecurity learning journey through hands-on lab
 - Mitigations
 - OWASP Threat Modeling
 
-## Repository Structure
-
-```text
-01-lab-setup/
-02-web-fundamentals/
-03-security-concepts/
-04-owasp-top10/
-05-security-testing/
-06-career-paths/
-07-frameworks/
-08-secure-sdlc/
-09-threat-modeling/
-```
-
 ## Goal
 
 Build practical cybersecurity skills, document lessons learned, and create a portfolio demonstrating continuous growth and hands-on experience.
