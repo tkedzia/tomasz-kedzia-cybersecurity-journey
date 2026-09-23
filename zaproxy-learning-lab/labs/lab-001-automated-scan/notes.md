@@ -37,18 +37,14 @@ Date:
 
 ## Challenges
 
-- Learning how alert risk levels are assigned.
-- getting familiar with alerts content and how they are linked to CWE and WASC items
 - how to track down specific weakness via its ID on WASC page: http://projects.webappsec.org/w/page/13246974/Threat%20Classification%20Reference%20Grid 
 
 ## Lessons Learned
 
 - Spider discovers content.
 - Alerts should always be validated manually.
-- Specific alert provides type of weekens
+- Specific alert provides type of weakness
 
 ## Next Steps
 
-- Learn traditional Spider.
-- Learn AJAX Spider.
-- Compare results.
+- perform manual scan
