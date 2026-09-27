@@ -25,7 +25,7 @@ Date:
 5. Enabled Manual Explore
 6. Logged in to OWASP juice-shop as a user
 7. Started exploring the site to build site tree within ZAP
-8. Choose a site from the API site tree and attack with ZAP 
+8. Choose a site from the API site tree and attack with ZAP. Focus especially on backend APIs (API / REST endpoints). 
 
 ## ZAP Components Used
 
@@ -36,15 +36,16 @@ Date:
 ## Observations
 
 - ZAP built site tree following my manual exploring.
-- Attack was later triggered by me manually against specific sites.
-- Multiple medium alerts appeared.
+- Attack was later triggered by me manually against specific sites (right click -> Attack).
+- Multiple alerts from various severities (from High to Informational) appeared.
 
 ## Challenges
 
-- Understanding what actions I need to perform: enabling manual explore, log in as user, explore the site what resulted in site tree cration, attach chosen sites
+- Understanding what actions I need to perform: enabling manual explore, log in as user, explore the site what resulted in site tree cration, attack chosen sites
 
 ## Lessons Learned
-
+- persisting the session to be able continue on it the next day
+- performing required sequence of actions: enabling manual explore, log in as user, explore the site what resulted in site tree cration, attack chosen sites
 
 ## Next Steps
 
