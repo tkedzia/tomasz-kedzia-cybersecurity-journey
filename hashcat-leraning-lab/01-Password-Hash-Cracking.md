@@ -1,57 +1,35 @@
-# Lab 002 - Manual Explore
+# Lab 001 - Password Hash Cracking
 
 ## Objective
 
-Learn how to perform an Manual Explore using ZAProxy against
-OWASP Juice Shop.
+Try cracking hashes using hashcat (you will need to adjust the --backend-devices parameter, you can also create test md5 hashes online): hashcat --hash-type 0 --attack-mode 3 --optimized-kernel-enable --backend-devices 3 --workload-profile 1 --show hashes.txt
 
 ## Environment
 
-Target:
-http://localhost:3000
-
-Scanner:
-ZAP
+Tool: hashcat
 
 Date:
-2026-09-28
+2026-09-29-30
 
 ## Steps Performed
 
-1. Started Juice Shop
-2. Started ZAP
-3. Opened Manual Explore
-4. Entered target URL
-5. Enabled Manual Explore
-6. Logged in to OWASP juice-shop as a user
-7. Started exploring the site to build site tree within ZAP
-8. Choose a site from the API site tree and attack with ZAP. Focus especially on backend APIs (API / REST endpoints). 
-9. High Severity alert - SQL Injection was rised for the url: http://localhost:3000/rest/products/search?q=%27%28
-10. Preparing exploit SQL query + Encoding with ZAProxy builtin tool for encoding: http://localhost:3000/rest/products/search?q=juice%25%27+AND+1%3C%3E1%29%29+UNION+ALL+SELECT+type%2C+name%2C+tbl_name%2C+rootpage%2C+sql%2C+7%2C+8%2C+9+%2C+10+FROM+sqlite_master-- 
+1. Installed and launched Hashcat.
+2. Reviewed Hashcat command syntax.
+3. Generated test MD5 hashes.
+4. Created hashes.txt.
+5. Executed a brute-force attack (-a 3).
+6. Inspected recovered passwords with --show.
+7. Analyzed how hash-based password recovery works.
     
-## ZAP Components Used
-
-- Manual Explore
-- Attack
-- Alerts
+## hashcat Components Used
 
 ## Observations
 
-- ZAP built site tree following my manual exploring.
-- Attack was later triggered by me manually against specific sites (right click -> Attack).
-- Multiple alerts from various severities (from High to Informational) appeared.
-
 ## Challenges
 
-- Understanding what actions I need to perform: enabling manual explore, log in as user, explore the site what resulted in site tree cration, attack chosen sites
-
 ## Lessons Learned
-- persisting the session to be able continue on it the next day
-- performing required sequence of actions: enabling manual explore, log in as user, explore the site what resulted in site tree cration, attack chosen sites
 
 ## Next Steps
 
-- Try SQL injection following discovered alerts
-- Compare results.
 
 
