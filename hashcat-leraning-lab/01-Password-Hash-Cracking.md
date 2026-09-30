@@ -6,7 +6,9 @@ Try cracking hashes using hashcat (you will need to adjust the --backend-devices
 
 ## Environment
 
-Tool: hashcat
+Tools:
+Windows PowerShell
+hashcat
 
 Date:
 2026-09-29-30
@@ -14,13 +16,28 @@ Date:
 ## Steps Performed
 
 1. Installed and launched Hashcat.
-2. Reviewed Hashcat command syntax.
-3. Generated test MD5 hashes.
-4. Created hashes.txt.
-5. Executed a brute-force attack (-a 3).
-6. Inspected recovered passwords with --show.
-7. Analyzed how hash-based password recovery works.
-    
+   cd C:\hashcat-7.1.2
+   What this does
+    cd = Change Directory
+    C:\hashcat-7.1.2 = Folder where Hashcat is installed
+
+   .\hashcat.exe
+   .\ = Run executable from current folder
+    hashcat.exe = Hashcat program
+2. Identify available compute devices
+    .\hashcat.exe -I
+    -I = Information
+3. Create a file containing the hash
+   "0192023a7bbd73250516f069df18b500" | Out-File hashes.txt
+4. Identify the hash type
+   (Get-Content hashes.txt).Length
+   32 = MD5 (Hashcat mode 0)
+    40 = SHA1 (Hashcat mode 100)
+    64 = SHA256 (Hashcat mode 1400)
+    Why we're doing this
+    Hashcat needs to know which hashing algorithm was used. The value passed with the -m option in later commands depends on the hash type.
+5. Run Hashcat to identify available compute devices
+    Before starting the attack, check which CPU/GPU devices Hashcat can use.  
 ## hashcat Components Used
 
 ## Observations
