@@ -37,7 +37,8 @@ Date:
     Why we're doing this
     Hashcat needs to know which hashing algorithm was used. The value passed with the -m option in later commands depends on the hash type.
 7. Start the Hashcat attack
-   .\hashcat.exe --hash-type 0 --attack-mode 3 --optimized-kernel-enable --backend-devices 1 --workload-profile 1 --show hashes.txt
+   TO CRACK: .\hashcat.exe --hash-type 0 --attack-mode 3 --optimized-kernel-enable --backend-devices 1 --workload-profile 1 --show hashes.txt
+   TO SHOW THE CRACKING RESULT:.\hashcat.exe --hash-type 0 --attack-mode 3 --optimized-kernel-enable --backend-devices 1 --workload-profile 1 --show hashes.txt
 ## hashcat Components Used
 
 ## Observations
