@@ -28,7 +28,7 @@ Date:
     .\hashcat.exe -I
     -I = Information
 3. Create a file containing the hash
-   Set-Content -Encoding ASCII hashes.txt "0192023a7bbd73250516f069df18b500"
+   '827ccb0eea8a706c4c34a16891f84e7b' | Out-File -Encoding ascii hashes.txt
 5. Identify the hash type
    (Get-Content hashes.txt).Length
    32 = MD5 (Hashcat mode 0)
