@@ -38,15 +38,9 @@ Date:
 - TO CRACK: .\hashcat.exe --hash-type 0 --attack-mode 3 --optimized-kernel-enable --backend-devices 1 --workload-profile 1
 - TO SHOW THE CRACKING RESULT:.\hashcat.exe --hash-type 0 --attack-mode 3 --optimized-kernel-enable --backend-devices 1 --workload-profile 1 --show hashes.txt
 - OUTPUT: 0192023a7bbd73250516f069df18b500:admin123
-## hashcat Components Used
-
-## Observations
-
-## Challenges
-
-## Lessons Learned
-
-## Next Steps
-
-
-
+## Challenges / Lessons Learned
+- If you have only 1 compute device on your machine hashcat will use it by deafault
+- Cracking of some hashes may run forever
+- Your machine may overheat during the cracking and shut down = not enough cooling for such a demanding task
+- Hashcat is not showing cracking results by deafult, you need to add --show parameter
+- After cracking the hash I could logged in to juice-shop with exploited credentials:admin@juice-sh.op admin123
