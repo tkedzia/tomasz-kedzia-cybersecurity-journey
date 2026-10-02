@@ -49,5 +49,146 @@ Date:
 ## Lessons Learned
 - persisting the session to be able continue on it the next day
 - performing required sequence of actions: enabling manual explore, log in as user, explore the site what resulted in site tree cration, attack chosen sites
+# SQL Concepts Clarified
+
+## UNION ALL
+
+### What It Does
+
+`UNION ALL` combines the results of two queries by stacking their rows together.
+
+Example:
+
+```text
+Table A
+---------
+Row 1
+Row 2
+
+UNION ALL
+
+Table B
+---------
+Row 3
+Row 4
+```
+
+Result:
+
+```text
+Row 1
+Row 2
+Row 3
+Row 4
+```
+
+### Important Rule
+
+Both queries used with `UNION ALL` must return:
+
+- The same number of columns
+- Compatible column data types/structure
+
+Otherwise, the database will return an error.
+
+---
+
+## Why Numbers Were Used in Some SELECT Columns
+
+Example:
+
+```sql
+SELECT username, email, 7, 8, 9, 10
+```
+
+The values:
+
+```text
+7
+8
+9
+10
+```
+
+are **literal values**, not table columns.
+
+### Purpose
+
+They are commonly used as:
+
+- Placeholders
+- Filler values
+- A way to make the number of returned columns match another query (e.g., when using `UNION ALL`)
+
+Example:
+
+```sql
+SELECT username, email, 7, 8, 9, 10
+UNION ALL
+SELECT name, address, phone, city, country, zip
+```
+
+Both queries return six columns, so the `UNION ALL` operation is valid.
+
+### Key Point
+
+Numeric literals such as:
+
+```sql
+7, 8, 9, 10
+```
+
+are simply constant values returned in every row of the result set.
+
+---
+
+## SQL Comments
+
+### Single-Line Comment
+
+Two dashes start a comment:
+
+```sql
+--
+```
+
+Everything after `--` on the same line is ignored by the SQL engine.
+
+Example:
+
+```sql
+SELECT * FROM Users -- Return all users
+```
+
+The database executes:
+
+```sql
+SELECT * FROM Users
+```
+
+and ignores:
+
+```sql
+-- Return all users
+```
+
+### Common Uses
+
+- Explaining queries
+- Temporarily disabling parts of a query
+- Improving readability during testing and troubleshooting
+
+Example:
+
+```sql
+SELECT username,
+       email
+--     password
+FROM Users;
+```
+
+In this example, the `password` column is commented out and will not be included in the query.
+
+---
 
 
