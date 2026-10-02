@@ -44,3 +44,79 @@ Date:
 - Your machine may overheat during the cracking and shut down = not enough cooling for such a demanding task
 - Hashcat is not showing cracking results by deafult, you need to add --show parameter
 - After cracking the hash I could logged in to juice-shop with exploited credentials:admin@juice-sh.op admin123
+
+- Hashcat attempts to discover passwords by:
+
+Generating password candidates.
+Hashing them.
+Comparing generated hashes with target hashes.
+Reporting matches. [Cyber Secu...edzia) (4) | Word]
+Showing already-cracked passwords
+
+After a cracking session:
+
+--show
+
+displays recovered passwords.
+
+Important:
+
+--show does NOT crack hashes.
+It only displays previously recovered results. [Cyber Secu...edzia) (4) | Word]
+Multiple hashes
+
+Hashcat can:
+
+process many hashes simultaneously
+solve them in parallel
+use GPU acceleration where available. [Cyber Secu...edzia) (4) | Word]
+Backend devices
+
+Purpose:
+
+Select GPU/CPU devices used for cracking.
+Discovery workflow
+Detect available compute devices.
+Review device IDs.
+Choose relevant device(s).
+Use backend device parameter if needed.
+
+If omitted:
+
+Hashcat usually chooses automatically. [Cyber Secu...edzia) (4) | Word]
+Password attack types
+Brute Force
+
+Tries combinations systematically.
+
+Example idea:
+
+a
+b
+c
+...
+aa
+ab
+ac
+...
+
+Very expensive for long passwords. [Cyber Secu...edzia) (4) | Word]
+
+Dictionary Attack
+
+Uses:
+
+common passwords
+word lists
+known password databases
+
+Hashes those candidates and compares results. [Cyber Secu...edzia) (4) | Word]
+
+Rainbow Table Attack
+
+Uses precomputed password→hash mappings.
+
+Difference from dictionary attack:
+
+Dictionary attack computes hashes during execution.
+Rainbow tables use previously computed hashes. [Cyber Secu...edzia) (4) | Word]
