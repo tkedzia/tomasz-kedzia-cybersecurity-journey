@@ -22,20 +22,19 @@ Date:
 - .\ = Run executable from current folder
 - hashcat.exe = Hashcat program
 3. Identify available compute devices
-    .\hashcat.exe -I
-    -I = Information
+-.\hashcat.exe -I
+- -I = Information
 4. Create a file containing the hash
-   '827ccb0eea8a706c4c34a16891f84e7b' | Out-File -Encoding ascii hashes.txt
+  - '827ccb0eea8a706c4c34a16891f84e7b' | Out-File -Encoding ascii hashes.txt
 5. Identify the hash type
-   (Get-Content hashes.txt).Length
-   32 = MD5 (Hashcat mode 0)
-    40 = SHA1 (Hashcat mode 100)
-    64 = SHA256 (Hashcat mode 1400)
-    Why we're doing this
-    Hashcat needs to know which hashing algorithm was used. The value passed with the -m option in later commands depends on the hash type.
+- (Get-Content hashes.txt).Length
+- 32 = MD5 (Hashcat mode 0)
+- 40 = SHA1 (Hashcat mode 100)
+- 64 = SHA256 (Hashcat mode 1400)
+- Why we're doing this: Hashcat needs to know which hashing algorithm was used. The value passed with the -m option in later commands depends on the hash type.
 7. Start the Hashcat attack
-   TO CRACK: .\hashcat.exe --hash-type 0 --attack-mode 3 --optimized-kernel-enable --backend-devices 1 --workload-profile 1 --show hashes.txt
-   TO SHOW THE CRACKING RESULT:.\hashcat.exe --hash-type 0 --attack-mode 3 --optimized-kernel-enable --backend-devices 1 --workload-profile 1 --show hashes.txt
+- TO CRACK: .\hashcat.exe --hash-type 0 --attack-mode 3 --optimized-kernel-enable --backend-devices 1 --workload-profile 1 --show hashes.txt
+- TO SHOW THE CRACKING RESULT:.\hashcat.exe --hash-type 0 --attack-mode 3 --optimized-kernel-enable --backend-devices 1 --workload-profile 1 --show hashes.txt
 ## hashcat Components Used
 
 ## Observations
