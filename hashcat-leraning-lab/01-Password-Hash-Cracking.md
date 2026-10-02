@@ -16,13 +16,11 @@ Date:
 ## Steps Performed
 
 1. Installed and launched Hashcat.
-cd C:\hashcat-7.1.2
-What this does
-cd = Change Directory
-C:\hashcat-7.1.2 = Folder where Hashcat is installed
-.\hashcat.exe
-.\ = Run executable from current folder
-hashcat.exe = Hashcat program
+- cd C:\hashcat-7.1.2
+- What this does: C:\hashcat-7.1.2 = Folder where Hashcat is installed
+- .\hashcat.exe
+- .\ = Run executable from current folder
+- hashcat.exe = Hashcat program
 3. Identify available compute devices
     .\hashcat.exe -I
     -I = Information
