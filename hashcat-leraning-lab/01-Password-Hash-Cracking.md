@@ -17,17 +17,16 @@ Date:
 
 1. Installed and launched Hashcat.
 cd C:\hashcat-7.1.2
-   What this does
-   cd = Change Directory
-   C:\hashcat-7.1.2 = Folder where Hashcat is installed
-
-   .\hashcat.exe
-   .\ = Run executable from current folder
-    hashcat.exe = Hashcat program
-2. Identify available compute devices
+What this does
+cd = Change Directory
+C:\hashcat-7.1.2 = Folder where Hashcat is installed
+.\hashcat.exe
+.\ = Run executable from current folder
+hashcat.exe = Hashcat program
+3. Identify available compute devices
     .\hashcat.exe -I
     -I = Information
-3. Create a file containing the hash
+4. Create a file containing the hash
    '827ccb0eea8a706c4c34a16891f84e7b' | Out-File -Encoding ascii hashes.txt
 5. Identify the hash type
    (Get-Content hashes.txt).Length
