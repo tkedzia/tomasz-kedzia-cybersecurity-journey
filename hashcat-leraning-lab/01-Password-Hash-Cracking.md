@@ -43,54 +43,75 @@ Date:
 - Cracking of some hashes may run forever
 - Your machine may overheat during the cracking and shut down = not enough cooling for such a demanding task
 - Hashcat is not showing cracking results by deafult, you need to add --show parameter
-- After cracking the hash I could logged in to juice-shop with exploited credentials:admin@juice-sh.op admin123
 
-- Hashcat attempts to discover passwords by:
+# Hashcat related OTHER Notes
 
-Generating password candidates.
-Hashing them.
-Comparing generated hashes with target hashes.
-Reporting matches. [Cyber Secu...edzia) (4) | Word]
-Showing already-cracked passwords
+## How Hashcat Works
+
+Hashcat attempts to discover passwords by:
+
+1. Generating password candidates
+2. Hashing those candidates
+3. Comparing generated hashes with target hashes
+4. Reporting any matches found
+
+---
+
+## Showing Cracked Passwords
 
 After a cracking session:
 
+```bash
 --show
+```
 
-displays recovered passwords.
+Displays previously recovered passwords.
 
-Important:
+### Important
 
---show does NOT crack hashes.
-It only displays previously recovered results. [Cyber Secu...edzia) (4) | Word]
-Multiple hashes
+- `--show` does **not** crack hashes.
+- It only displays passwords that were already recovered during previous runs.
+
+---
+
+## Working with Multiple Hashes
 
 Hashcat can:
 
-process many hashes simultaneously
-solve them in parallel
-use GPU acceleration where available. [Cyber Secu...edzia) (4) | Word]
-Backend devices
+- Process multiple hashes simultaneously
+- Attempt to crack them in parallel
+- Use GPU acceleration when supported by the hardware
 
-Purpose:
+---
 
-Select GPU/CPU devices used for cracking.
-Discovery workflow
-Detect available compute devices.
-Review device IDs.
-Choose relevant device(s).
-Use backend device parameter if needed.
+## Backend Devices
 
-If omitted:
+### Purpose
 
-Hashcat usually chooses automatically. [Cyber Secu...edzia) (4) | Word]
-Password attack types
-Brute Force
+Backend devices determine which CPU/GPU resources Hashcat uses for cracking.
 
-Tries combinations systematically.
+### Discovery Workflow
 
-Example idea:
+1. Detect available compute devices
+2. Review device IDs
+3. Choose the appropriate device(s)
+4. Specify them using the backend device parameter if needed
 
+### Note
+
+If no device is specified, Hashcat usually selects available devices automatically.
+
+---
+
+# Password Attack Types
+
+## 1. Brute Force Attack
+
+Tries password combinations systematically.
+
+Example sequence:
+
+```text
 a
 b
 c
@@ -99,24 +120,56 @@ aa
 ab
 ac
 ...
+```
 
-Very expensive for long passwords. [Cyber Secu...edzia) (4) | Word]
+### Characteristics
 
-Dictionary Attack
+- Guarantees coverage of the defined search space
+- Becomes extremely time-consuming for long or complex passwords
 
-Uses:
+---
 
-common passwords
-word lists
-known password databases
+## 2. Dictionary Attack
 
-Hashes those candidates and compares results. [Cyber Secu...edzia) (4) | Word]
+Uses predefined password candidates such as:
 
-Rainbow Table Attack
+- Common passwords
+- Wordlists
+- Password leak databases
 
-Uses precomputed password→hash mappings.
+Workflow:
 
-Difference from dictionary attack:
+1. Take a candidate from the wordlist
+2. Generate its hash
+3. Compare it against the target hash
+4. Repeat until a match is found or the list is exhausted
 
-Dictionary attack computes hashes during execution.
-Rainbow tables use previously computed hashes. [Cyber Secu...edzia) (4) | Word]
+### Advantages
+
+- Much faster than brute force
+- Effective against weak or commonly used passwords
+
+---
+
+## 3. Rainbow Table Attack
+
+Uses precomputed password-to-hash mappings.
+
+### How It Works
+
+Instead of generating hashes during the attack:
+
+- Password/hash combinations are calculated beforehand
+- The attacker looks up hashes in the precomputed table
+
+### Difference from Dictionary Attack
+
+| Dictionary Attack | Rainbow Table Attack |
+|------------------|---------------------|
+| Computes hashes during execution | Uses precomputed hashes |
+| Requires more computation | Requires more storage |
+| More flexible | Faster lookups when tables already exist |
+
+---
+- After cracking the hash I could logged in to juice-shop with exploited credentials:admin@juice-sh.op admin123
+
