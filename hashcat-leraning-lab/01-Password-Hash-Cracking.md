@@ -16,7 +16,7 @@ Date:
 ## Steps Performed
 
 1. Installed and launched Hashcat.
-   cd C:\hashcat-7.1.2
+cd C:\hashcat-7.1.2
    What this does
    cd = Change Directory
    C:\hashcat-7.1.2 = Folder where Hashcat is installed
