@@ -237,10 +237,13 @@ https://csrc.nist.gov/pubs/sp/800/61/r3/final
 ### Tasks
 
 - Interpret this requirement in plain English.
-- ANSWER: 
+### ANSWER: Level of protection measures applied to protect certain assets is assumed based on their prioritization. Following aspects are taken into account to set priorities: what class of data is particular asset handling e.g. strictly confidential, confidential, internal, public. How big impact will have on organization cybersecurity adverse event influencing particular asses, based on this criticality can be assumed. Not sure what is resources meaning in this context. ANother factor to be taken into consideration to set priority level of a particular asset is how much this asset is important to materialize organization's mission.  
 - Identify the risks if assets are not prioritized appropriately.
+### ANSWER: 1. Wasting money for protection measures applied to not relevant assets. 2. Weak protection of assets with truly high priority. 3. Severe repercussions to organization after cybersecurity adverse events impacting high priority assets that were not protected appropriately. 
 - List examples of evidence that would demonstrate compliance with this requirement.
+### ANSWER: 1. Existing data classification policy with associated procedures in place. 2. Existing subset of assets recognized as critical with set of procedures dedicated to such assests.
 - Identify the appropriate owner(s) of this requirement.
+### ANSWER: Asset Owner, CISO
 
 ---
 
