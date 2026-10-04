@@ -1,22 +1,54 @@
-For each Subcategory
+# NIST CSF Subcategory Analysis: Plain-English Interpretation, Risks, Evidence, and Ownership
 
-Interprete it in plain English
+## Instructions
 
-List the potential risks if the outcome isn't achieved
+For each subcategory:
 
-Provide a list of evidence that proves outcome has been achieved
+1. Interpret it in plain English.
+2. List the potential risks if the outcome is not achieved.
+3. Provide a list of evidence that demonstrates the outcome has been achieved.
+4. Indicate the owner(s) responsible for the outcome.
 
-Indicate the ownership
+---
 
-Questions for this assignment
-Subcategory 1 — RS.CO-02
+## Subcategory 1 — RS.CO-02
 
-“Internal and external stakeholders are notified of incidents”
+**Statement:**  
+> "Internal and external stakeholders are notified of incidents"
 
-Subcategory 2 — ID.AM-05
+### Tasks
 
-“Assets are prioritized based on classification, criticality, resources, and impact on the mission”
+- Interpret this requirement in plain English.
+- Identify the risks if stakeholders are not notified appropriately during an incident.
+- List examples of evidence that would demonstrate compliance with this requirement.
+- Identify the appropriate owner(s) of this requirement.
 
-Subcategory 3 — GV.RM-02
+---
 
-“Risk appetite and risk tolerance statements are established, communicated, and maintained”
+## Subcategory 2 — ID.AM-05
+
+**Statement:**  
+> "Assets are prioritized based on classification, criticality, resources, and impact on the mission"
+
+### Tasks
+
+- Interpret this requirement in plain English.
+- Identify the risks if assets are not prioritized appropriately.
+- List examples of evidence that would demonstrate compliance with this requirement.
+- Identify the appropriate owner(s) of this requirement.
+
+---
+
+## Subcategory 3 — GV.RM-02
+
+**Statement:**  
+> "Risk appetite and risk tolerance statements are established, communicated, and maintained"
+
+### Tasks
+
+- Interpret this requirement in plain English.
+- Identify the risks if risk appetite and risk tolerance are not defined and communicated.
+- List examples of evidence that would demonstrate compliance with this requirement.
+- Identify the appropriate owner(s) of this requirement.
+
+---
