@@ -503,8 +503,230 @@ https://nvlpubs.nist.gov/nistpubs/CSWP/NIST.CSWP.29.pdf 【2-641165】
 ### Tasks
 
 - Interpret this requirement in plain English.
+### ANSWER: There is Risk Management policy within organization and relevant standards and procedures. Those include statement regarding what is the level of risk tolerance/appetite per specific risks. There are risk awareness trainings for the staff for all levels of organization. As well as there are standards and procedures to keep up to date the list of risks and their related risk tolerance/apetite per risk categories.
 - Identify the risks if risk appetite and risk tolerance are not defined and communicated.
+### ANSWER: 1. Risks will not be managed properly what may lead to incidents impacting organization. 2. If risk tolerance/apetite is not set investments for risk mitigation might be too big or to low, in other words not allocated as per existing tolerance which is a result of potential impact, likelihood of occuring etc. 3. If there is not communication arounf risks, whatever policies, standards, procedures will exist they will not be applied accross organization will result in negative events impacting organization.
 - List examples of evidence that would demonstrate compliance with this requirement.
+### ANSWER: Risk management policy, standard and procedures, Risk register, Risk Controls
 - Identify the appropriate owner(s) of this requirement.
+### Risk Team, all employees, CISO, Security Teams etc
+---
+## NIST Alignment Review
+
+> [!NOTE]
+> The observations below are suggested refinements to improve alignment with the official NIST Cybersecurity Framework (CSF) 2.0. Your answers demonstrate a good understanding of risk governance concepts, but NIST places particular emphasis on defining, communicating, and maintaining explicit risk appetite and risk tolerance statements that guide decision-making across the organization. 【1-a29815】【2-9ea001】
+
+# Subcategory 3 — GV.RM-02
+
+## Official NIST Statement
+
+> "Risk appetite and risk tolerance statements are established, communicated, and maintained." 【1-a29815】【2-9ea001】
 
 ---
+
+## 1. Plain-English Interpretation
+
+### Review of Current Answer
+
+✅ Generally correct.
+
+⚠️ Your answer focuses heavily on risk management documentation and training, but the core of this requirement is ensuring that leadership defines how much cybersecurity risk the organization is willing to accept and communicates that throughout the organization.
+
+### Suggested Enhancement
+
+> [!TIP]
+> The organization formally defines:
+>
+> - **Risk Appetite** – the general amount and type of cybersecurity risk the organization is willing to accept in pursuit of its objectives.
+> - **Risk Tolerance** – specific and measurable limits that define how much risk can be accepted before action or escalation is required.
+>
+> These statements are communicated to decision-makers throughout the organization and are periodically reviewed and updated to reflect changes in business objectives, threat landscape, legal requirements, and residual risk exposure.
+>
+> The purpose is to ensure that cybersecurity decisions are made consistently and align with leadership's expectations regarding acceptable risk levels. 【1-a29815】【2-9ea001】
+
+### Why This Enhancement?
+
+NIST implementation examples specifically mention:
+
+- Determining and communicating risk appetite statements.
+- Translating risk appetite into specific and measurable risk tolerance statements.
+- Periodically refining risk appetite based on risk exposure and residual risk. 【1-a29815】【3-785f0e】
+
+---
+
+## 2. Risks if the Outcome Is Not Achieved
+
+### Review of Current Answer
+
+✅ Correct.
+
+⚠️ Additional governance and decision-making risks should be highlighted.
+
+### Suggested Enhancement
+
+> [!WARNING]
+> Potential risks include:
+>
+> - Inconsistent risk-related decisions across departments.
+> - Acceptance of risks that exceed leadership expectations.
+> - Excessive spending on controls that provide limited business value.
+> - Insufficient investment in controls protecting critical assets and services.
+> - Misalignment between cybersecurity activities and business objectives.
+> - Inability to prioritize remediation, security initiatives, or risk treatment efforts.
+> - Increased likelihood of cyber incidents and business disruption.
+> - Regulatory, contractual, or compliance issues resulting from unmanaged risk.
+> - Lack of executive visibility into organizational risk exposure.
+> - Difficulty justifying risk acceptance decisions during audits or investigations. 【1-a29815】【2-9ea001】【4-2dd186】
+
+---
+
+## 3. Evidence of Compliance
+
+### Review of Current Answer
+
+✅ Correct direction.
+
+⚠️ More evidence is needed to demonstrate that risk appetite and tolerance have been defined, communicated, and maintained.
+
+### Suggested Enhancement
+
+> [!TIP]
+> Examples of evidence:
+>
+> ### Governance Documentation
+>
+> - Enterprise Risk Management (ERM) Policy
+> - Cybersecurity Risk Management Policy
+> - Risk Appetite Statement
+> - Risk Tolerance Statement
+> - Risk Acceptance Standard
+>
+> ### Risk Management Records
+>
+> - Risk Register
+> - Risk Assessment Reports
+> - Risk Treatment Plans
+> - Risk Acceptance Records
+> - Executive Risk Dashboards
+>
+> ### Communication Evidence
+>
+> - Board or Executive Committee meeting minutes approving risk appetite
+> - Internal communications announcing risk appetite and tolerance updates
+> - Risk awareness training materials
+> - Management presentations explaining risk thresholds
+>
+> ### Maintenance and Review Evidence
+>
+> - Periodic reviews of risk appetite statements
+> - Change records showing updates after significant business or threat changes
+> - Annual governance reviews
+> - Audit reports validating risk governance practices
+>
+> Evidence should demonstrate:
+>
+> - Risk appetite was formally approved.
+> - Risk tolerance thresholds were defined.
+> - Stakeholders were informed.
+> - The statements are periodically reviewed and updated.
+> - The statements influence actual business and cybersecurity decisions. 【1-a29815】【2-9ea001】【4-2dd186】
+
+---
+
+## 4. Ownership
+
+### Review of Current Answer
+
+⚠️ Partially correct.
+
+While all employees should understand applicable risk expectations, they are typically not considered owners of this requirement.
+
+### Suggested Enhancement
+
+#### Primary Owners
+
+- Board of Directors (where applicable)
+- Executive Leadership
+- Enterprise Risk Management (ERM) Function
+- Risk Management Team
+
+#### Supporting Owners
+
+- CISO
+- Cybersecurity Governance Team
+- Security Teams
+- Compliance Team
+- Internal Audit
+- Business Leadership
+
+> [!IMPORTANT]
+> NIST places GV.RM-02 within the **Govern (GV)** function. As a result, ownership is generally driven by executive leadership and the risk management function rather than operational security teams. Security teams help implement and monitor risk decisions but typically do not determine organizational risk appetite. 【2-9ea001】【1-a29815】
+
+---
+
+# Relevant NIST Resources
+
+## Primary Resource
+
+### NIST Cybersecurity Framework (CSF) 2.0
+
+https://www.nist.gov/cyberframework
+
+---
+
+## GV.RM-02 Reference
+
+### Risk Management Strategy
+
+> "Risk appetite and risk tolerance statements are established, communicated, and maintained." 【1-a29815】【2-9ea001】
+
+https://csf.tools/reference/nist-cybersecurity-framework/v2-0/gv/gv-rm/gv-rm-02/
+
+---
+
+## NIST Implementation Examples for GV.RM-02
+
+NIST specifically recommends:
+
+- Determine and communicate risk appetite statements.
+- Translate risk appetite statements into specific, measurable risk tolerance statements.
+- Refine organizational objectives and risk appetite periodically based on risk exposure and residual risk. 【1-a29815】【3-785f0e】
+
+---
+
+# Overall Assessment
+
+> [!SUMMARY]
+>
+> **Plain-English Interpretation**
+>
+> ✅ Good understanding.
+>
+> ⚠️ Needs stronger emphasis on defining acceptable risk levels and translating them into measurable tolerances.
+>
+> **Risks**
+>
+> ✅ Correct.
+>
+> ⚠️ Governance, decision-making, and resource-allocation risks should be expanded.
+>
+> **Evidence**
+>
+> ⚠️ Correct direction, but auditors would typically expect explicit risk appetite statements, approval records, communication artifacts, and evidence of periodic review.
+>
+> **Ownership**
+>
+> ⚠️ Partially correct.
+>
+> Executive leadership and risk management functions should generally be identified as primary owners. Security teams are usually supporting stakeholders.
+
+### Alignment Score
+
+> **8/10**
+>
+> Your understanding aligns well with NIST intent. The biggest opportunity for improvement is distinguishing between:
+>
+> - **Risk Appetite** (what level of risk the organization is willing to accept), and
+> - **Risk Tolerance** (specific measurable limits that trigger action or escalation).
+>
+> Also consider placing greater ownership on executive leadership and risk governance functions, which is consistent with the **Govern (GV)** function of the CSF. 【1-a29815】【2-9ea001】
