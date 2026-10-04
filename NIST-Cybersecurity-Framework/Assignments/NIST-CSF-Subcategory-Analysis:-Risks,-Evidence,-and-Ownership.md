@@ -245,6 +245,254 @@ https://csrc.nist.gov/pubs/sp/800/61/r3/final
 - Identify the appropriate owner(s) of this requirement.
 ### ANSWER: Asset Owner, CISO
 
+## NIST Alignment Review
+
+> [!NOTE]
+> The observations below are suggested refinements to improve alignment with the official NIST Cybersecurity Framework (CSF) 2.0. They are intended to supplement your answers and strengthen their audit readiness. 【1-1d78ca】【2-641165】
+
+# Subcategory 2 — ID.AM-05
+
+## Official NIST Statement
+
+> "Assets are prioritized based on classification, criticality, resources, and impact on the mission." 【1-1d78ca】【3-e01f69】
+
+---
+
+## 1. Plain-English Interpretation
+
+### Review of Current Answer
+
+✅ Good understanding of classification, criticality, and mission impact.
+
+⚠️ The definition of **resources** could be expanded and clarified.
+
+### Suggested Enhancement
+
+> [!TIP]
+> The organization identifies which assets are the most important and assigns them appropriate priority levels so that cybersecurity efforts are focused where they matter the most.
+>
+> Asset prioritization should consider:
+>
+> - **Classification** – the sensitivity of data handled by the asset (e.g., Public, Internal, Confidential, Restricted).
+> - **Criticality** – how essential the asset is to business operations.
+> - **Resources** – the value of the asset and the effort, time, money, personnel, technology, or capabilities required to replace or restore it.
+> - **Mission Impact** – the degree to which loss, compromise, or unavailability of the asset would affect the organization's objectives, products, services, customers, or regulatory obligations.
+>
+> Prioritization should drive security decisions such as:
+>
+> - Monitoring
+> - Vulnerability remediation
+> - Access controls
+> - Backup frequency
+> - Disaster recovery planning
+> - Incident response prioritization
+>
+> The objective is not to protect every asset equally, but to ensure that the most important assets receive the strongest protection. 【1-1d78ca】【3-e01f69】【2-641165】
+
+### Why This Enhancement?
+
+NIST implementation examples specifically mention:
+
+- Defining prioritization criteria.
+- Applying prioritization criteria to assets.
+- Tracking asset priorities and periodically updating them as organizational conditions change. 【1-1d78ca】【3-e01f69】
+
+---
+
+## 2. Risks if the Outcome Is Not Achieved
+
+### Review of Current Answer
+
+✅ Correct.
+
+⚠️ Additional operational and governance risks should be considered.
+
+### Suggested Enhancement
+
+> [!WARNING]
+> Potential risks include:
+>
+> - Excessive spending on protecting low-value assets.
+> - Insufficient protection of mission-critical assets.
+> - Delayed detection and response to attacks against critical systems.
+> - Inappropriate allocation of cybersecurity resources.
+> - Business disruption resulting from failure of high-priority assets.
+> - Increased financial losses during cyber incidents.
+> - Failure to meet customer, contractual, or regulatory requirements.
+> - Longer recovery times following ransomware or other disruptive events.
+> - Inability to prioritize restoration activities during disaster recovery.
+> - Increased overall organizational risk due to lack of focus on critical assets. 【1-1d78ca】【4-319c29】
+
+---
+
+## 3. Evidence of Compliance
+
+### Review of Current Answer
+
+✅ Good starting point.
+
+⚠️ NIST would typically expect evidence showing a complete prioritization process rather than only classification and identification of critical assets.
+
+### Suggested Enhancement
+
+> [!TIP]
+> Examples of evidence:
+>
+> ### Policies & Standards
+>
+> - Asset Management Policy
+> - Data Classification Policy
+> - Asset Prioritization Standard
+> - Risk Assessment Methodology
+>
+> ### Inventories & Registers
+>
+> - Enterprise Asset Inventory
+> - Configuration Management Database (CMDB)
+> - Critical Asset Register
+> - Data Inventory
+>
+> ### Prioritization Artifacts
+>
+> - Asset classification matrix
+> - Asset criticality ratings
+> - Business Impact Analysis (BIA)
+> - Asset prioritization methodology
+> - Asset scoring model
+> - Dependency mappings
+>
+> ### Operational Evidence
+>
+> - Asset owners assigned to critical assets
+> - Periodic asset review records
+> - Risk assessment results
+> - Recovery priority lists
+> - Security monitoring coverage aligned with asset priority
+> - Backup and disaster recovery plans reflecting asset criticality
+>
+> Evidence should demonstrate:
+>
+> - How prioritization criteria were defined.
+> - How the criteria were applied.
+> - Who approved the prioritization.
+> - When prioritization was last reviewed.
+> - How prioritization influences security and operational decisions. 【1-1d78ca】【3-e01f69】【4-319c29】
+
+---
+
+## 4. Ownership
+
+### Review of Current Answer
+
+✅ Largely correct.
+
+⚠️ Additional business ownership responsibilities should be reflected.
+
+### Suggested Enhancement
+
+#### Primary Owners
+
+- Asset Owners
+- System Owners
+- Business Service Owners
+
+#### Supporting Owners
+
+- CISO
+- Information Security Team
+- Enterprise Architecture Team
+- IT Operations Team
+- Risk Management Team
+- Business Continuity Team
+
+> [!IMPORTANT]
+> Asset prioritization is fundamentally a business decision supported by cybersecurity. The business or asset owner is generally best positioned to determine mission impact and criticality, while the cybersecurity function provides guidance on risk and protection requirements. 【4-319c29】【5-6c65f1】
+
+---
+
+# Relevant NIST Resources
+
+## Primary Resource
+
+### NIST Cybersecurity Framework (CSF) 2.0
+
+https://www.nist.gov/cyberframework
+
+---
+
+## ID.AM-05 Reference
+
+### Asset Management
+
+> "Assets are prioritized based on classification, criticality, resources, and impact on the mission." 【1-1d78ca】【3-e01f69】
+
+https://csf.tools/reference/nist-cybersecurity-framework/v2-0/id/id-am/id-am-05/
+
+---
+
+## NIST Implementation Examples for ID.AM-05
+
+NIST specifically recommends:
+
+- Define criteria for prioritizing each class of assets.
+- Apply the prioritization criteria to assets.
+- Track asset priorities and update them periodically or when significant organizational changes occur. 【1-1d78ca】【3-e01f69】
+
+---
+
+## Supporting NIST References
+
+### Security Categorization
+
+<NamedEntity>NIST SP 800-53 RA-2</NamedEntity>
+
+Supports categorization of systems and information based on importance and impact. 【1-1d78ca】
+
+### Criticality Analysis
+
+<NamedEntity>NIST SP 800-53 RA-9</NamedEntity>
+
+Supports identification of critical system functions and components. 【1-1d78ca】
+
+### NIST Cybersecurity Framework 2.0
+
+NIST CSWP 29 - The NIST Cybersecurity Framework (CSF) 2.0
+
+https://nvlpubs.nist.gov/nistpubs/CSWP/NIST.CSWP.29.pdf 【2-641165】
+
+---
+
+# Overall Assessment
+
+> [!SUMMARY]
+>
+> **Plain-English Interpretation**
+>
+> ✅ Strong understanding of classification, criticality, and mission impact.
+>
+> ⚠️ The concept of "resources" should be expanded to include the value of the asset and the effort required to replace or restore it.
+>
+> **Risks**
+>
+> ✅ Correct.
+>
+> ⚠️ Additional emphasis should be placed on operational disruption, recovery, and resource-allocation risks.
+>
+> **Evidence**
+>
+> ⚠️ Correct direction, but auditors would generally expect evidence of a formal asset inventory, prioritization methodology, and business impact assessments.
+>
+> **Ownership**
+>
+> ✅ Mostly correct.
+>
+> ⚠️ Asset Owners and Business Owners should generally be identified as primary owners, with the CISO acting in a supporting governance role.
+
+### Alignment Score
+
+> **8.5/10**
+>
+> Your interpretation is largely aligned with NIST intent. The main opportunity for improvement is to clarify the meaning of **resources**, show how prioritization directly affects operational cybersecurity decisions, and expand the evidence section to include inventories, criticality assessments, and business impact analysis.
 ---
 
 ## Subcategory 3 — GV.RM-02
