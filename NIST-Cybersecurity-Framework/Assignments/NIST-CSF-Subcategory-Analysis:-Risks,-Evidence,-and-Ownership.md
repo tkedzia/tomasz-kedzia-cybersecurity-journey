@@ -19,7 +19,7 @@ For each subcategory:
 ### Tasks
 
 - Interpret this requirement in plain English.
-- ANSWER: whenever there cybersecurity incident occurs e.g. sensitive information leaked outside of the organization and become publicly available, both internal and external stakeholders are informed. INTERNAL: e.g. owner of the data that leaked, all levels of organization including Top management, owners of cybersecurity policies, owners of preventive measures. If an organization operates in regulated environment also regulators and other parties that by the law need to be informed.
+# ANSWER: whenever there cybersecurity incident occurs e.g. sensitive information leaked outside of the organization and become publicly available, both internal and external stakeholders are informed. INTERNAL: e.g. owner of the data that leaked, all levels of organization including Top management, owners of cybersecurity policies, owners of preventive measures. If an organization operates in regulated environment also regulators and other parties that by the law need to be informed.
 - Identify the risks if stakeholders are not notified appropriately during an incident.
 - ANSWER: organization will get penalized extra for not adhering to governmental laws and policies, reputation of the organization will be negatively impacted, organization may loose customers and its revenue may lower.
 - List examples of evidence that would demonstrate compliance with this requirement.
