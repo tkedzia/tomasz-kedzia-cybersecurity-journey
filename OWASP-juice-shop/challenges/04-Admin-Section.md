@@ -12,7 +12,7 @@ right click >> Inspect >> Ctrl+Shift+F >> searched for: `administration` >> I fo
 
 ### Lessons Learned
 Administrative interfaces should never rely on hidden or unlinked client-side routes for security. True access control must be strictly enforced on the server/API level, ensuring proper authentication and role checks regardless of whether a user discovers the frontend path.
-**Angular Routing Insights:**
+####**Angular Routing Insights:**
 * **What Angular Is:** Angular is a client-side Single Page Application (SPA) framework developed by Google. It ships all frontend logic, components, and routing definitions directly to the user's browser in bundled JavaScript files (e.g., `main.js`).
 * **How Interpreting It Enabled the Solution:** Angular uses a Hash Location Strategy (`/#/`) by default, where route definitions map string literals (like `path: 'administration'`) directly to URL hash fragments. Understanding that Angular's router evaluates paths entirely on the client side meant that finding the hidden route string in the source code immediately revealed the corresponding navigable URL format (`http://localhost:3000/#/administration`).
 ---
