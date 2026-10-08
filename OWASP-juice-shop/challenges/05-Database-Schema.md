@@ -22,3 +22,10 @@ Applications must never concatenate user input directly into SQL queries. Input 
   3. **Nullifying Original Query Results (`AND 1<>1))`):** The operator `1<>1` (1 is not equal to 1) evaluates to `FALSE`. Combining this with the closing double parentheses `))` balances the application's internal query grouping while forcing the original `Products` search to return zero rows. This leaves the result set clean so that only injected rows are returned.
   4. **Appending Schema Data (`UNION ALL SELECT ... FROM sqlite_master`):** The `UNION ALL` operator merges the results of the primary query with the secondary query. The secondary query selects schema metadata columns (`type`, `name`, `tbl_name`, `rootpage`, `sql`) along with dummy numeric constants (`7, 8, 9, 10`) to match the exact 9-column schema expected by the `Products` table.
   5. **Truncating Boilerplate Code (`--`):** The SQL comment sequence `--` instructs the database engine to ignore all remaining original query logic trailing after the input point (such as `%' OR description LIKE...`), preventing syntax errors due to unclosed quotes or parentheses.
+
+# Coding Challenge: Database Schema (SQL Injection)
+
+## 1. Vulnerable Line
+**Line 5:**
+```typescript
+models.sequelize.query(`SELECT * FROM Products WHERE ((name LIKE '%${criteria}%' OR description LIKE '%${criteria}%') AND deletedAt IS NULL) ORDER BY name`)
