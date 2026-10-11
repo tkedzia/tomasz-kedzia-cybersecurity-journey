@@ -2,7 +2,7 @@
 
 > **Scope:** Self-hosted/local OWASP Juice Shop training environment only  
 > **Category:** Injection  
-> **Challenge:** Login Bender  
+> **Challenge:** Login Bender (the same applies to Login Jim challange)
 > **Objective:** Log in using Bender’s account without knowing or cracking the password.
 
 ## Summary
@@ -14,7 +14,7 @@ The successful request returned HTTP `200 OK` and an authentication token, confi
 ## Tools Used
 
 - OWASP Juice Shop — intentionally vulnerable training application
-- OWASP ZAP — intercepting proxy and HTTP request editor
+- OWASP ZAP — intercepting proxy and HTTP request editor, steps performed (in short: performing manual explore using ZAProxy, attempted login request with valid email and random password, found the request recorded by ZAP on the page tree, mause right clisk and selected Open/.Resend with Request Editor, altered the request as described below, re-sent it, SOLVED): https://drive.google.com/file/d/1WZtCVh0kPKA-OAdtbJDZ-9y4yQXz0-M2/view?usp=drive_link
 - Browser launched/configured through ZAP
 
 ## Target Endpoint
