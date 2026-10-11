@@ -35,7 +35,7 @@ Date:
 - 64 = SHA256 (Hashcat mode 1400)
 - Why we're doing this: Hashcat needs to know which hashing algorithm was used. The value passed with the --hash-type option in later command depends on the hash type.
 7. Start the Hashcat attack
-- TO CRACK: .\hashcat.exe --hash-type 0 --attack-mode 3 --optimized-kernel-enable --backend-devices 1 --workload-profile 1
+- TO CRACK: .\hashcat.exe --hash-type 0 --attack-mode 3 --optimized-kernel-enable --backend-devices 1 --workload-profile 1 hashes.txt
 - TO SHOW THE CRACKING RESULT:.\hashcat.exe --hash-type 0 --attack-mode 3 --optimized-kernel-enable --backend-devices 1 --workload-profile 1 --show hashes.txt
 - OUTPUT: 0192023a7bbd73250516f069df18b500:admin123
 ## Challenges / Lessons Learned
