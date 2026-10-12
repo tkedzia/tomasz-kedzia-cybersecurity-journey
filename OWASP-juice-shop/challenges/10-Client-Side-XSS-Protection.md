@@ -228,6 +228,7 @@ The first screenshot shows:
 - `HTTP/1.1 201 Created`;
 - `Location: /api/Users/27`;
 - the injected value returned in the response.
+  <img width="1427" height="755" alt="image" src="https://github.com/user-attachments/assets/2c8ce59a-0159-4c7d-adfe-d9f06c4d8ef3" />
 
 ### Screenshot 2 — JavaScript execution
 
@@ -236,6 +237,7 @@ The second screenshot shows:
 - the administration route;
 - a browser alert associated with `localhost:3000`;
 - the alert text `xss`.
+<img width="1916" height="891" alt="image" src="https://github.com/user-attachments/assets/08c8220f-cb61-4673-b39a-65724a04cea2" />
 
 This demonstrates execution, rather than merely storage or reflection of the payload.
 
@@ -246,6 +248,7 @@ The third screenshot shows:
 - the details dialog for User #27;
 - the injected payload in the email field;
 - creation and update timestamps matching the API response.
+<img width="1912" height="876" alt="image" src="https://github.com/user-attachments/assets/acf31316-5f02-4aa0-8df1-132fe6ed8b94" />
 
 The payload is displayed as text in this particular details dialog. That does not contradict execution elsewhere on the page: different components can render the same value in different ways.
 
