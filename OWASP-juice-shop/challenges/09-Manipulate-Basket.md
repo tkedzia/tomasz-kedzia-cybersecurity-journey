@@ -29,8 +29,8 @@ This exercise was performed only against a deliberately vulnerable, locally host
 | Tool | OWASP ZAP Manual Request Editor |
 | Authenticated account | `jim@juice-sh.op` |
 | Authentication method | Valid `Authorization: Bearer <token>` header |
-| My basket ID | `1` |
-| Target basket ID | `2` |
+| My basket ID | `2` |
+| Target basket ID | `1` |
 | Product ID used in the completed test | `22` |
 | Quantity | `1` |
 
@@ -74,8 +74,8 @@ The problem became more serious because the application received two trolley lab
 
 As a result:
 
-1. the authorization check effectively said, “Yes, this user owns basket `1`”;
-2. the product operation effectively said, “Add the item to basket `2`”;
+1. the authorization check effectively said, “Yes, this user owns basket `2`”;
+2. the product operation effectively said, “Add the item to basket `1`”;
 3. the system did not verify that the final basket being modified belonged to the authenticated user.
 
 The login itself was valid. The failure was in authorization: the application did not consistently verify whether the logged-in user was allowed to modify the basket that was ultimately changed.
@@ -87,7 +87,7 @@ First, I attempted a direct modification by supplying only another user’s bask
 ```json
 {
   "ProductId": 22,
-  "BasketId": "2",
+  "BasketId": "1",
   "quantity": 1
 }
 ```
@@ -159,7 +159,7 @@ Important elements visible in the request:
 
 > Sensitive session material is visible in the original capture. Do not publish a live Bearer token in a public repository. Replace it with `<redacted-token>` before committing screenshots, or crop/redact the `Authorization` header.
 
-![Crafted POST request in OWASP ZAP](image.jpg)
+<img width="1907" height="998" alt="image" src="https://github.com/user-attachments/assets/0c1b1b88-2fc5-4747-8879-1eca97412797" />
 
 ### 2. HTTP response
 
@@ -167,7 +167,7 @@ The server returned `HTTP/1.1 200 OK`.
 
 The response indicates that a basket-item record was created successfully. The fact that the request was accepted despite conflicting basket identifiers is the central issue demonstrated by this challenge.
 
-![HTTP 200 response in OWASP ZAP](image-2.jpg)
+<img width="1907" height="967" alt="image" src="https://github.com/user-attachments/assets/d837167f-8955-4a96-aa5f-9b8c13729e1b" />
 
 ### 3. Challenge completion confirmation
 
@@ -176,7 +176,7 @@ The Juice Shop interface confirmed successful completion of the challenge:
 > You successfully solved a challenge: Manipulate Basket  
 > Put an additional product into another user's shopping basket.
 
-![OWASP Juice Shop challenge success notification](image-3.jpg)
+<img width="1918" height="262" alt="image" src="https://github.com/user-attachments/assets/11eb654d-4ebd-44ad-a03d-7b869d23592b" />
 
 ## Technical explanation: HTTP Parameter Pollution
 
