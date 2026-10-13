@@ -51,6 +51,7 @@ The server responded with `201 Created`. The newly created account contained the
 ```
 
 The response revealed that the user model includes a `role` field, even though the standard registration form does not submit it.
+<img width="1907" height="960" alt="image" src="https://github.com/user-attachments/assets/4e8e37c3-d82b-4560-bce8-87887257637f" />
 
 ### 2. Modifying the Request in OWASP ZAP
 
@@ -117,6 +118,7 @@ JSON response excerpt:
 ```
 
 The `"role": "admin"` field confirmed that the backend accepted the additional parameter and created an account with the administrator role.
+<img width="1908" height="886" alt="image" src="https://github.com/user-attachments/assets/5395caac-d372-40dc-b448-57e7bf3a24e6" />
 
 ### 4. Confirming Challenge Completion
 
@@ -130,6 +132,7 @@ You successfully solved a challenge: Admin Registration
 This notification confirmed that the challenge was completed.
 
 The screenshots document the creation of an administrator account, but they do not show a separate login or interaction with the administration panel.
+<img width="1902" height="853" alt="image" src="https://github.com/user-attachments/assets/9f575eb5-b863-4ffb-96bd-4b6891dc105e" />
 
 ## Vulnerability Explanation
 
