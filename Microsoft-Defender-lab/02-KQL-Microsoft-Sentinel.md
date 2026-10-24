@@ -4,6 +4,7 @@
 ## Purpose
 
 Use **KQL** in Microsoft Defender XDR Advanced Hunting to search, filter, aggregate, visualize, correlate, and parse security logs.
+<img width="1280" height="720" alt="image" src="https://github.com/user-attachments/assets/0425876e-d490-4d46-899c-038fe282abd7" />
 
 ```text
 https://security.microsoft.com
