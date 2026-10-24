@@ -29,12 +29,14 @@ SigninLogs_CL
 ```kql
 SecurityEvent_CL
 ```
+<img width="1367" height="771" alt="image" src="https://github.com/user-attachments/assets/4e5a83a9-3a0f-4bfe-8ad7-eb5a0f01ea0a" />
 
 ### Broad text search
 
 ```kql
 search "Computer"
 ```
+<img width="1398" height="892" alt="image" src="https://github.com/user-attachments/assets/a4c716ea-6b54-4564-92f7-981089c32212" />
 
 ```kql
 search in (SecurityEvent_CL, App*) "new"
