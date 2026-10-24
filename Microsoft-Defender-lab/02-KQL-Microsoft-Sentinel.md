@@ -60,6 +60,7 @@ SecurityEvent_CL
 | where TimeGenerated > ago(5d)
 | where EventID_s == 4624
 ```
+<img width="1893" height="772" alt="image" src="https://github.com/user-attachments/assets/b7f5c271-1443-48eb-aadb-37a25cba313f" />
 
 ```kql
 SecurityEvent_CL
@@ -67,12 +68,14 @@ SecurityEvent_CL
 | where EventID_s == 4624
 | where AccountType_s =~ "user"
 ```
+<img width="1890" height="761" alt="image" src="https://github.com/user-attachments/assets/23fe15d9-b7a2-4b0f-834d-be2d8fdcbedd" />
 
 ```kql
 SecurityEvent_CL
 | where TimeGenerated > ago(5d)
 | where EventID_s in (4624, 4625)
 ```
+<img width="1888" height="765" alt="image" src="https://github.com/user-attachments/assets/2f3e8303-6de5-4d2e-9594-a07a058dfe6d" />
 
 | Event ID | Meaning |
 |---|---|
@@ -96,6 +99,20 @@ SecurityEvent_CL
 | where TimeGenerated < ago(timeOffset)
 | where EventID_s != discardEventID
 ```
+## In Plain English
+
+> Show all security events that occurred **between 60 days ago and 1 day ago**, excluding **process-creation events**.
+
+```text
+60 days ago  ----------------  1 day ago  ---  Now
+      Include events here          Exclude recent events
+```
+
+> **Note:** `timeOffset` may appear more flexible than it really is. Changing its value changes both boundaries:
+>
+> - Older boundary: `timeOffset * 60`
+> - Newer boundary: `timeOffset`
+<img width="1892" height="783" alt="image" src="https://github.com/user-attachments/assets/433bf1fb-55bd-45d4-962f-9df05815be14" />
 
 ### Define suspicious accounts
 
