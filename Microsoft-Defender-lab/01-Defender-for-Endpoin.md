@@ -81,6 +81,7 @@ If `WIN1` does not appear after about one hour, investigate:
    ```text
    [TestAlert] Suspicious PowerShell commandline
    ```
+<img width="1887" height="797" alt="image" src="https://github.com/user-attachments/assets/70b7e672-1eb1-49bd-8bf9-200925378ea2" />
 
 3. Review:
    - **Alert story timeline**
@@ -116,6 +117,8 @@ PowerShell is legitimate administration tooling but is also frequently abused fo
    ```
 
 4. Select **Manage incident**.
+
+<img width="1897" height="798" alt="image" src="https://github.com/user-attachments/assets/69757b0d-04cb-430f-adc9-1ba3b1b0f96c" />
 
 5. Add the tag:
 
