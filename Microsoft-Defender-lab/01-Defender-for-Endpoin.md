@@ -19,6 +19,7 @@ Validate Microsoft Defender for Endpoint onboarding, generate a safe test detect
    ```text
    Assets > Devices
    ```
+<img width="1377" height="777" alt="image" src="https://github.com/user-attachments/assets/ce244c23-99ce-4e37-96d5-418e9778ee19" />
 
 2. Confirm `WIN1` appears in the device inventory.
 
