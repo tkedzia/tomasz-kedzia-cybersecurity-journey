@@ -44,12 +44,16 @@ search in (SecurityEvent_CL, App*) "new"
 
 > `search` is useful for exploration but less efficient than filtering specific tables and columns.
 
+<img width="1918" height="985" alt="image" src="https://github.com/user-attachments/assets/57741580-55c2-431e-b0b3-f0975c01a7c7" />
+
 ### Filter with `where`
 
 ```kql
 SecurityEvent_CL
 | where TimeGenerated > ago(5d)
 ```
+<img width="1907" height="887" alt="image" src="https://github.com/user-attachments/assets/d2eef85b-a96d-412f-ad31-a260a3097d01" />
+<img width="1892" height="770" alt="image" src="https://github.com/user-attachments/assets/93b026c1-1c33-4e40-bcc9-f63a979e50e5" />
 
 ```kql
 SecurityEvent_CL
