@@ -1105,7 +1105,56 @@ Use a wildcard:
 union Sec*
 | summarize count() by Type
 ```
+### In Plain English
 
+> Combine rows from every table whose name starts with `Sec`, then count how many rows came from each table.
+
+```kql
+union Sec*
+```
+
+`Sec*` is a wildcard pattern:
+
+- `Sec` means the table name must start with these letters.
+- `*` means “anything after this.”
+
+For example, it may include tables such as:
+
+```text
+SecurityEvent_CL
+SecurityAlert
+SecurityIncident
+```
+
+```kql
+| summarize count() by Type
+```
+
+Group the combined rows by `Type` and count them.
+
+`Type` usually identifies the original table that each row came from.
+
+Example result:
+
+| Type | count_ |
+|---|---:|
+| `SecurityEvent_CL` | 8,000 |
+| `SecurityAlert` | 120 |
+| `SecurityIncident` | 15 |
+
+```text
+All tables starting with "Sec"
+        |
+        +-- Combine their rows
+                |
+                +-- Group rows by source table
+                        |
+                        +-- Count rows from each table
+```
+
+> **Why this is useful:** It provides a quick overview of how much data exists across multiple related security tables without listing each table manually.
+
+<img width="1901" height="812" alt="image" src="https://github.com/user-attachments/assets/1f4d2e54-a48d-4bd9-8215-dc1f30bbb6a0" />
 
 ### `join`
 
@@ -1123,6 +1172,88 @@ SecurityEvent_CL
     | project LogOffCount, Account_s
 ) on Account_s
 ```
+### In Plain English
+
+> Find accounts that have both **successful logon** and **logoff** events, then show the total number of each event type for every matching account.
+
+```kql
+SecurityEvent_CL
+```
+
+Start with the `SecurityEvent_CL` security-log table.
+
+```kql
+| where EventID_s == 4624
+```
+
+Keep only event ID `4624`, which represents a **successful logon**.
+
+```kql
+| summarize LogOnCount = count() by Account_s
+```
+
+Group events by account and count successful logons for each account. Name the result `LogOnCount`.
+
+```kql
+| project LogOnCount, Account_s
+```
+
+Keep only the account name and logon-count columns.
+
+```kql
+| join kind = inner (
+```
+
+Join these logon results to a second query. The `inner` join means: keep only accounts that appear in **both** queries.
+
+```kql
+    SecurityEvent_CL
+    | where EventID_s == 4634
+```
+
+In the second query, keep only event ID `4634`, which represents a **logoff**.
+
+```kql
+    | summarize LogOffCount = count() by Account_s
+```
+
+Count logoff events for each account and name the result `LogOffCount`.
+
+```kql
+    | project LogOffCount, Account_s
+) on Account_s
+```
+
+Match the two result sets using the shared field:
+
+```text
+Account_s
+```
+
+Example result:
+
+| Account_s | LogOnCount | LogOffCount |
+|---|---:|---:|
+| `DOMAIN\alice` | 12 | 10 |
+| `DOMAIN\bob` | 5 | 5 |
+
+Accounts with only logons or only logoffs are excluded because this is an `inner` join.
+
+```text
+All security events
+        |
+        +-- Count successful logons per account
+        |
+        +-- Count logoffs per account
+                |
+                +-- Match both result sets by account name
+                        |
+                        +-- Show accounts present in both
+```
+
+> **Why this is useful:** It can identify accounts with unusual logon/logoff patterns. For example, many logons but few logoffs may indicate disconnected sessions, service-account behavior, missing telemetry, or activity worth investigating.
+
+<img width="1907" height="830" alt="image" src="https://github.com/user-attachments/assets/c3480276-28c4-46e4-a620-524ebe104e10" />
 
 | Operator | Purpose |
 |---|---|
@@ -1131,6 +1262,7 @@ SecurityEvent_CL
 | `inner` | Returns matching rows only |
 | `leftouter` | Returns all left-table rows and matching right-table rows |
 | `leftanti` | Returns left-table rows without a match |
+
 
 ***
 
@@ -1141,6 +1273,61 @@ SecurityEvent_CL
 ```kql
 print extract("x=([0-9.]+)", 1, "hello x=45.6|wo")
 ```
+### In Plain English
+
+> Find the number after `x=` in the text, then display it.
+
+```kql
+print extract("x=([0-9.]+)", 1, "hello x=45.6|wo")
+```
+
+```kql
+print
+```
+
+Display a value instead of querying a log table.
+
+```kql
+extract("x=([0-9.]+)", 1, "hello x=45.6|wo")
+```
+
+Look inside this text:
+
+```text
+hello x=45.6|wo
+```
+
+The pattern:
+
+```text
+x=([0-9.]+)
+```
+
+means:
+
+| Part | Meaning |
+|---|---|
+| `x=` | Find these exact characters. |
+| `(` `)` | Mark the part to extract. |
+| `[0-9.]` | Allow numbers (`0`–`9`) and a decimal point (`.`). |
+| `+` | Match one or more allowed characters. |
+
+The `1` means: return the **first marked group** in parentheses.
+
+```text
+hello x=45.6|wo
+        └── Extract: 45.6
+```
+
+**Output:**
+
+```text
+45.6
+```
+
+> `extract()` is useful when important information is embedded inside an unstructured text field and must be pulled out into a separate value.
+
+<img width="1882" height="812" alt="image" src="https://github.com/user-attachments/assets/f5b174b4-e9cc-48fc-8c3b-2a4c30542c73" />
 
 ### Extract account name
 
@@ -1153,6 +1340,88 @@ SecurityEvent_CL
 | where Account_Name != ""
 | where LoginCount < 10
 ```
+### In Plain English
+
+> Find user accounts that received **special privileges** during logon, extract just the username from the account field, count those events, and show accounts with fewer than 10 such events.
+
+```kql
+SecurityEvent_CL
+```
+
+Start with the security-event log table.
+
+```kql
+| where EventID_s == 4672
+```
+
+Keep only event ID `4672`.
+
+This event commonly means that **special privileges were assigned to a new logon**, such as administrative-level privileges.
+
+```kql
+| where AccountType_s == "User"
+```
+
+Keep only events associated with a normal **user account** rather than, for example, a machine or service account.
+
+```kql
+| extend Account_Name = extract(@"^(.*\\)?([^@]*)(@.*)?$", 2, tolower(Account_s))
+```
+
+Create a new column called `Account_Name`.
+
+This line:
+
+1. Converts `Account_s` to lowercase with `tolower()`.
+2. Removes a domain prefix such as `DOMAIN\`.
+3. Removes an email suffix such as `@company.com`.
+4. Keeps only the username.
+
+Examples:
+
+| Original `Account_s` | Extracted `Account_Name` |
+|---|---|
+| `DOMAIN\Alice` | `alice` |
+| `bob@company.com` | `bob` |
+| `DOMAIN\admin@company.com` | `admin` |
+
+```kql
+| summarize LoginCount = count() by Account_Name
+```
+
+Group events by the cleaned username and count how many privileged-logon events each account has.
+
+```kql
+| where Account_Name != ""
+```
+
+Remove blank account names, which could occur if the extraction finds no usable username.
+
+```kql
+| where LoginCount < 10
+```
+
+Show only accounts with fewer than 10 privileged-logon events.
+
+```text
+All security events
+        |
+        +-- Keep special-privilege logons (4672)
+                |
+                +-- Keep user accounts
+                        |
+                        +-- Extract and normalize username
+                                |
+                                +-- Count privileged logons per user
+                                        |
+                                        +-- Remove blank names
+                                                |
+                                                +-- Show users with fewer than 10 events
+```
+
+> **Why this is useful:** It creates a cleaner account list when logs use different formats, such as `DOMAIN\username` and `username@company.com`. Analysts can then look for unusual privileged account usage, especially unfamiliar accounts or unexpected administrative logons.
+
+<img width="1903" height="817" alt="image" src="https://github.com/user-attachments/assets/92faefe5-d246-4104-b214-c2bda1eec685" />      
 
 ### Parse structured text
 
