@@ -521,6 +521,56 @@ SecurityEvent_CL
 | where Computer == "VictimPC2"
 | summarize arg_max(TimeGenerated, *) by Computer
 ```
+### In Plain English
+
+> Find the **most recent security event** recorded for the computer named `VictimPC2`.
+
+```kql
+SecurityEvent_CL
+```
+
+Start with the `SecurityEvent_CL` security-log table.
+
+```kql
+| where Computer == "VictimPC2"
+```
+
+Keep only events from the computer:
+
+```text
+VictimPC2
+```
+
+```kql
+| summarize arg_max(TimeGenerated, *) by Computer
+```
+
+Find the row with the **latest** `TimeGenerated` value for that computer.
+
+- `arg_max()` means: return the row where a chosen value is the largest.
+- `TimeGenerated` is the value used to decide which row is latest.
+- `*` means: return **all columns** from that latest event.
+- `by Computer` groups results by computer. In this case, only `VictimPC2` is included.
+
+Example result:
+
+| Computer | TimeGenerated | EventID_s | Account_s |
+|---|---|---:|---|
+| `VictimPC2` | `2026-10-25 04:30:15` | `4624` | `DOMAIN\alex` |
+
+```text
+All security events
+        |
+        +-- Keep only events from VictimPC2
+                |
+                +-- Find the newest event by time
+                        |
+                        +-- Return all details from that event
+```
+
+> **Why this is useful:** It quickly shows the most recent known activity on a device, which can help determine whether it is still active or what happened most recently during an investigation.
+
+<img width="1897" height="806" alt="image" src="https://github.com/user-attachments/assets/c6be39f3-59d7-458c-97a2-1f4dc9cc5082" />
 
 ### Earliest event: `arg_min()`
 
@@ -529,6 +579,56 @@ SecurityEvent_CL
 | where Computer == "VictimPC2"
 | summarize arg_min(TimeGenerated, *) by Computer
 ```
+### In Plain English
+
+> Find the **oldest security event** recorded for the computer named `VictimPC2`.
+
+```kql
+SecurityEvent_CL
+```
+
+Start with the `SecurityEvent_CL` security-log table.
+
+```kql
+| where Computer == "VictimPC2"
+```
+
+Keep only events from this computer:
+
+```text
+VictimPC2
+```
+
+```kql
+| summarize arg_min(TimeGenerated, *) by Computer
+```
+
+Find the row with the **earliest** `TimeGenerated` value for that computer.
+
+- `arg_min()` means: return the row where a selected value is smallest.
+- `TimeGenerated` is used to determine which event happened first.
+- `*` means: return **all columns** from that event.
+- `by Computer` groups the output by computer.
+
+Example result:
+
+| Computer | TimeGenerated | EventID_s | Account_s |
+|---|---|---:|---|
+| `VictimPC2` | `2026-10-20 08:12:34` | `4624` | `DOMAIN\alex` |
+
+```text
+All security events
+        |
+        +-- Keep only events from VictimPC2
+                |
+                +-- Find the oldest event by time
+                        |
+                        +-- Return all details from that event
+```
+
+> **Why this is useful:** It helps establish the earliest activity available for a device within the retained log data, which can help build an investigation timeline.
+
+<img width="1906" height="786" alt="image" src="https://github.com/user-attachments/assets/7a4999fe-9434-4576-9c39-92cb8775d3f8" />
 
 ### Pipe-order lesson
 
@@ -539,6 +639,51 @@ SecurityEvent_CL
 | summarize arg_max(TimeGenerated, *) by Account_s
 | where EventID_s == 4624
 ```
+### In Plain English
+
+> Find each account’s **most recent security event**, then keep only accounts where that most recent event was a **successful logon**.
+
+```kql
+SecurityEvent_CL
+```
+
+Start with all records in the `SecurityEvent_CL` security-log table.
+
+```kql
+| summarize arg_max(TimeGenerated, *) by Account_s
+```
+
+For every account:
+
+- Find the event with the latest `TimeGenerated` timestamp.
+- Return all details (`*`) from that event.
+- Produce one row per account.
+
+```kql
+| where EventID_s == 4624
+```
+
+From those latest events, keep only rows where the event ID is `4624`, meaning a **successful Windows logon**.
+
+Example:
+
+| Account | Latest event | Included? |
+|---|---:|---|
+| `DOMAIN\alice` | `4624` — successful logon | Yes |
+| `DOMAIN\bob` | `4634` — logoff | No |
+| `DOMAIN\admin` | `4688` — process creation | No |
+
+```text
+All security events
+        |
+        +-- Find the newest event for every account
+                |
+                +-- Keep accounts whose newest event is a successful logon
+```
+
+> **Important:** This does **not** show the latest successful logon for every account. It shows only accounts whose latest activity of any kind was a successful logon.
+
+<img width="1898" height="750" alt="image" src="https://github.com/user-attachments/assets/6425e3aa-9fa6-49db-8270-6ed35fd89ade" />
 
 **Latest successful logon for every account that logged on:**
 
@@ -549,6 +694,53 @@ SecurityEvent_CL
 ```
 
 > Filter before `summarize` when looking for the latest event of a specific type.
+
+### In Plain English
+
+> For every account that has successfully logged on, show its **most recent successful logon**.
+
+```kql
+SecurityEvent_CL
+```
+
+Start with all records in the `SecurityEvent_CL` security-log table.
+
+```kql
+| where EventID_s == 4624
+```
+
+Keep only event ID `4624`, which represents a **successful Windows logon**.
+
+```kql
+| summarize arg_max(TimeGenerated, *) by Account_s
+```
+
+For each account:
+
+- Find the row with the latest `TimeGenerated` value.
+- Return all columns (`*`) from that latest successful-logon event.
+- Return one result row per account.
+
+Example result:
+
+| Account_s | TimeGenerated | Computer | EventID_s |
+|---|---|---|---:|
+| `DOMAIN\alice` | `2026-10-25 05:30:12` | `WIN1` | `4624` |
+| `DOMAIN\bob` | `2026-10-24 18:42:07` | `Server01` | `4624` |
+
+```text
+All security events
+        |
+        +-- Keep only successful logons (4624)
+                |
+                +-- Group by account
+                        |
+                        +-- Find the newest successful logon per account
+```
+
+> **Key difference:** The query filters for logons **before** finding the newest event. Therefore, an account is included even if its most recent overall activity was later a logoff, process creation, or another event.
+
+<img width="1897" height="801" alt="image" src="https://github.com/user-attachments/assets/b21c0e1c-5ddf-4842-90f5-6c4fd42152cd" />
 
 ***
 
@@ -562,6 +754,60 @@ SecurityEvent_CL
 | where EventID_s == 4624
 | summarize make_list(Account_s) by Computer
 ```
+### In Plain English
+
+> For each computer, create a list of all accounts that successfully logged on during the last five days. The same account can appear more than once.
+
+```kql
+SecurityEvent_CL
+```
+
+Start with the `SecurityEvent_CL` security-log table.
+
+```kql
+| where TimeGenerated > ago(5d)
+```
+
+Keep only events from the last **five days**.
+
+```kql
+| where EventID_s == 4624
+```
+
+Keep only event ID `4624`, which represents a **successful Windows logon**.
+
+```kql
+| summarize make_list(Account_s) by Computer
+```
+
+Group the remaining events by `Computer`.
+
+For each computer, create a list containing the `Account_s` value from every successful logon event.
+
+Example result:
+
+| Computer | list_Account_s |
+|---|---|
+| `WIN1` | `["DOMAIN\alice", "DOMAIN\bob", "DOMAIN\alice"]` |
+| `Server01` | `["DOMAIN\admin", "DOMAIN\service_sql"]` |
+
+`DOMAIN\alice` appears twice for `WIN1` because that account logged on successfully twice.
+
+```text
+All security events
+        |
+        +-- Keep events from the last 5 days
+                |
+                +-- Keep successful logons (4624)
+                        |
+                        +-- Group by computer
+                                |
+                                +-- Create a list of all logged-on accounts
+```
+
+> **Why this is useful:** It shows which accounts were used on each computer and how frequently they appear. Duplicate entries can help reveal repeated logons.
+
+<img width="1902" height="810" alt="image" src="https://github.com/user-attachments/assets/6ae8dc5e-0544-4b14-a072-480eb144adfe" />
 
 ### Unique values: `make_set()`
 
@@ -571,6 +817,60 @@ SecurityEvent_CL
 | where EventID_s == 4624
 | summarize make_set(Account_s) by Computer
 ```
+### In Plain English
+
+> For each computer, create a list of the **unique accounts** that successfully logged on during the last five days.
+
+```kql
+SecurityEvent_CL
+```
+
+Start with the `SecurityEvent_CL` security-log table.
+
+```kql
+| where TimeGenerated > ago(5d)
+```
+
+Keep only events from the last **five days**.
+
+```kql
+| where EventID_s == 4624
+```
+
+Keep only event ID `4624`, which represents a **successful Windows logon**.
+
+```kql
+| summarize make_set(Account_s) by Computer
+```
+
+Group the remaining events by `Computer`.
+
+For each computer, create a set of unique `Account_s` values. If the same user logged on multiple times, that user appears only once.
+
+Example result:
+
+| Computer | set_Account_s |
+|---|---|
+| `WIN1` | `["DOMAIN\alice", "DOMAIN\bob"]` |
+| `Server01` | `["DOMAIN\admin", "DOMAIN\service_sql"]` |
+
+Even if `DOMAIN\alice` logged on ten times to `WIN1`, `make_set()` shows it once.
+
+```text
+All security events
+        |
+        +-- Keep events from the last 5 days
+                |
+                +-- Keep successful logons (4624)
+                        |
+                        +-- Group by computer
+                                |
+                                +-- Create a unique list of logged-on accounts
+```
+
+> **Key difference:** `make_list()` preserves duplicates; `make_set()` removes duplicates.
+
+<img width="1900" height="818" alt="image" src="https://github.com/user-attachments/assets/e4f1cbfb-67a7-4d15-a07a-a9e84d2817dd" />
 
 ***
 
@@ -584,6 +884,57 @@ SecurityEvent_CL
 | summarize count() by Account_s
 | render columnchart
 ```
+### In Plain English
+
+> Create a bar chart showing how many security events each account generated during the last five days.
+
+```kql
+SecurityEvent_CL
+```
+
+Start with the `SecurityEvent_CL` security-log table.
+
+```kql
+| where TimeGenerated > ago(5d)
+```
+
+Keep only events from the last **five days**.
+
+```kql
+| summarize count() by Account_s
+```
+
+Group the events by account and count the number of events for each account.
+
+```kql
+| render columnchart
+```
+
+Display the results as a **column chart**.
+
+Example data before visualization:
+
+| Account_s | count_ |
+|---|---:|
+| `DOMAIN\alice` | 120 |
+| `DOMAIN\bob` | 45 |
+| `DOMAIN\admin` | 310 |
+
+```text
+All security events
+        |
+        +-- Keep events from the last 5 days
+                |
+                +-- Group events by account
+                        |
+                        +-- Count events per account
+                                |
+                                +-- Display as a column chart
+```
+
+> **Why this is useful:** It makes unusually active accounts easier to spot visually. High event counts are not automatically malicious, but they can indicate accounts worth investigating.
+
+<img width="1902" height="806" alt="image" src="https://github.com/user-attachments/assets/278da484-4970-4676-9c90-8f3a6799ba49" />
 
 ### Time-series chart
 
@@ -595,6 +946,60 @@ SecurityEvent_CL
 ```
 
 > `bin()` groups timestamps into fixed intervals.
+
+### In Plain English
+
+> Create a line chart showing how many security events occurred each minute during the last five days.
+
+```kql
+SecurityEvent_CL
+```
+
+Start with the `SecurityEvent_CL` security-log table.
+
+```kql
+| where TimeGenerated > ago(5d)
+```
+
+Keep only events from the last **five days**.
+
+```kql
+| summarize count() by bin(TimeGenerated, 1m)
+```
+
+Group event timestamps into **one-minute intervals**, then count how many events occurred in each minute.
+
+```kql
+| render timechart
+```
+
+Display the results as a **time-series line chart**.
+
+Example data before visualization:
+
+| TimeGenerated | count_ |
+|---|---:|
+| `2026-10-25 05:40:00` | 12 |
+| `2026-10-25 05:41:00` | 8 |
+| `2026-10-25 05:42:00` | 47 |
+
+```text
+All security events
+        |
+        +-- Keep events from the last 5 days
+                |
+                +-- Group timestamps into 1-minute intervals
+                        |
+                        +-- Count events per minute
+                                |
+                                +-- Display as a line chart
+```
+
+> `bin(TimeGenerated, 1m)` rounds timestamps into one-minute buckets. For example, events at `05:40:12` and `05:40:55` are both counted in the `05:40:00` interval.
+
+> **Why this is useful:** It helps identify spikes in activity, such as a sudden burst of logons, process creation, or other security events.
+
+<img width="1908" height="807" alt="image" src="https://github.com/user-attachments/assets/d62f8efa-058d-43ba-aa52-a49cd04c8585" />
 
 ***
 
@@ -608,6 +1013,42 @@ Append rows from tables:
 SecurityEvent_CL
 | union SigninLogs_CL
 ```
+### In Plain English
+
+> Combine all rows from the `SecurityEvent_CL` table with all rows from the `SigninLogs_CL` table into one result set.
+
+```kql
+SecurityEvent_CL
+```
+
+Start with all records from the `SecurityEvent_CL` table.
+
+```kql
+| union SigninLogs_CL
+```
+
+Add all records from the `SigninLogs_CL` table below them.
+
+```text
+SecurityEvent_CL rows
+        +
+SigninLogs_CL rows
+        =
+One combined result set
+```
+
+Example conceptually:
+
+| Source table | Example data |
+|---|---|
+| `SecurityEvent_CL` | Windows logon, logoff, process-creation events |
+| `SigninLogs_CL` | Cloud sign-in events, application access, source IP data |
+
+> **Important:** `union` does **not** match related records together. It simply appends rows from one or more tables.
+
+> **Difference from `join`:** Use `union` to combine similar log data into one list; use `join` when you want to match records between tables based on a shared value, such as an account name or IP address.
+
+<img width="1907" height="820" alt="image" src="https://github.com/user-attachments/assets/80ad3dfe-e93d-4d1e-837c-0ee3380cf705" />
 
 Count all rows:
 
@@ -616,6 +1057,47 @@ SecurityEvent_CL
 | union SigninLogs_CL
 | summarize count()
 ```
+### In Plain English
+
+> Count the total number of records in both the `SecurityEvent_CL` and `SigninLogs_CL` tables combined.
+
+```kql
+SecurityEvent_CL
+```
+
+Start with all security-event records.
+
+```kql
+| union SigninLogs_CL
+```
+
+Add all sign-in-log records to the same result set.
+
+```kql
+| summarize count()
+```
+
+Count every row in the combined result set.
+
+Example:
+
+| Table | Number of rows |
+|---|---:|
+| `SecurityEvent_CL` | 8,000 |
+| `SigninLogs_CL` | 2,500 |
+| **Combined count** | **10,500** |
+
+```text
+SecurityEvent_CL rows
+        +
+SigninLogs_CL rows
+        |
+        +-- Count all combined rows
+```
+
+> **Important:** This counts **events**, not unique users, devices, or IP addresses. If the same user has 50 events, all 50 rows are included in the total.
+
+<img width="1910" height="817" alt="image" src="https://github.com/user-attachments/assets/b53c92ce-02a1-4780-a173-cb2dab2ce1d6" />
 
 Use a wildcard:
 
@@ -623,6 +1105,7 @@ Use a wildcard:
 union Sec*
 | summarize count() by Type
 ```
+
 
 ### `join`
 
