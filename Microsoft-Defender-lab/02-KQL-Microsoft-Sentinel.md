@@ -125,6 +125,55 @@ SecurityEvent_CL
 | where TimeGenerated > ago(7d)
 | where Account_s in (suspiciousAccounts)
 ```
+### In Plain English
+
+> Create a short watchlist of two accounts, then show security events from the last seven days involving either account.
+
+```kql
+let suspiciousAccounts = datatable(account: string) [
+    @"NA\timadmin",
+    @"NT AUTHORITY\SYSTEM"
+];
+```
+
+This creates a temporary table named `suspiciousAccounts`.
+
+It contains two account names:
+
+```text
+NA\timadmin
+NT AUTHORITY\SYSTEM
+```
+
+The `@` before the first account means KQL treats the backslash as a normal character, not as a special escape character.
+
+```kql
+SecurityEvent_CL
+```
+
+Search the `SecurityEvent_CL` log table.
+
+```kql
+| where TimeGenerated > ago(7d)
+```
+
+Keep only events from the last **seven days**.
+
+```kql
+| where Account_s in (suspiciousAccounts)
+```
+
+Keep only events where the `Account_s` field matches an account in the temporary watchlist.
+
+```text
+All security events
+        |
+        +-- Keep events from the last 7 days
+                |
+                +-- Keep events involving timadmin or SYSTEM
+```
+
+<img width="1916" height="757" alt="image" src="https://github.com/user-attachments/assets/01700fd0-274c-4ffe-b576-e2fa38d188fd" />
 
 ### Define a reusable result set
 
