@@ -185,6 +185,61 @@ let LowActivityAccounts =
 LowActivityAccounts
 | where Account_s contains "sql"
 ```
+### In Plain English
+
+> First, create a temporary list of accounts with fewer than 1,000 recorded events. Then, from that list, show only accounts whose name contains `sql`.
+
+```kql
+let LowActivityAccounts =
+```
+
+Creates a reusable temporary result set named:
+
+```text
+LowActivityAccounts
+```
+
+```kql
+SecurityEvent_CL
+| summarize cnt = count() by Account_s
+```
+
+Looks at all security events and counts how many events belong to each account.
+
+Example intermediate result:
+
+| Account_s | cnt |
+|---|---:|
+| `DOMAIN\sqlservice` | 25 |
+| `DOMAIN\administrator` | 1,500 |
+| `DOMAIN\sqlbackup` | 87 |
+
+```kql
+| where cnt < 1000;
+```
+
+Keeps only accounts with fewer than 1,000 events.
+
+```kql
+LowActivityAccounts
+| where Account_s contains "sql"
+```
+
+Queries the temporary list and returns only account names containing `sql`.
+
+```text
+All security events
+        |
+        +-- Count events for each account
+                |
+                +-- Keep accounts with fewer than 1,000 events
+                        |
+                        +-- Show accounts whose name contains "sql"
+```
+
+> **Important:** “Low activity” here means fewer than 1,000 events in the entire table. Because the query has no `TimeGenerated` filter, it does not mean low activity over a specific period such as the last 7 days.
+
+<img width="1910" height="805" alt="image" src="https://github.com/user-attachments/assets/43a8c4b7-650b-4016-8fd0-bced3cd2b3d5" />
 
 ***
 
@@ -198,6 +253,57 @@ SecurityEvent_CL
 | where EventID_s == 4688
 | summarize count() by Computer
 ```
+### In Plain English
+
+> Show how many **process-creation events** occurred on each computer during the last **five days**.
+
+```kql
+SecurityEvent_CL
+```
+
+Start with the `SecurityEvent_CL` security-log table.
+
+```kql
+| where TimeGenerated > ago(5d)
+```
+
+Keep only events generated within the last **five days**.
+
+```kql
+| where EventID_s == 4688
+```
+
+Keep only events with ID `4688`, which commonly represents a **new process being created** on Windows.
+
+```kql
+| summarize count() by Computer
+```
+
+Group the remaining events by computer name and count them.
+
+Example result:
+
+| Computer | count_ |
+|---|---:|
+| `WIN1` | 450 |
+| `VictimPC2` | 1,250 |
+| `Server01` | 87 |
+
+```text
+All security events
+        |
+        +-- Keep events from the last 5 days
+                |
+                +-- Keep only process-creation events (4688)
+                        |
+                        +-- Group by computer
+                                |
+                                +-- Count events per computer
+```
+
+> **Why this is useful:** A computer with an unusually high number of process-creation events may deserve investigation, especially if the activity is unexpected for that device.
+
+<img width="1912" height="813" alt="image" src="https://github.com/user-attachments/assets/1f3f81ef-92ec-4f60-bf93-5e80edc60425" />
 
 ### Count logons by account type and device
 
@@ -207,6 +313,62 @@ SecurityEvent_CL
 | where EventID_s == 4624
 | summarize cnt = count() by AccountType_s, Computer
 ```
+### In Plain English
+
+> Show how many **successful logons** occurred during the last **five days**, grouped by both **account type** and **computer**.
+
+```kql
+SecurityEvent_CL
+```
+
+Start with the `SecurityEvent_CL` security-log table.
+
+```kql
+| where TimeGenerated > ago(5d)
+```
+
+Keep only events generated within the last **five days**.
+
+```kql
+| where EventID_s == 4624
+```
+
+Keep only events with ID `4624`, which commonly represents a **successful Windows logon**.
+
+```kql
+| summarize cnt = count() by AccountType_s, Computer
+```
+
+Group the remaining events by:
+
+- `AccountType_s` — for example, `User`, `Machine`, or `Service`
+- `Computer` — the device where the logon happened
+
+Then count the events in each combination. The count is named `cnt`.
+
+Example result:
+
+| AccountType_s | Computer | cnt |
+|---|---|---:|
+| `User` | `WIN1` | 42 |
+| `Machine` | `WIN1` | 15 |
+| `User` | `Server01` | 109 |
+
+```text
+All security events
+        |
+        +-- Keep events from the last 5 days
+                |
+                +-- Keep only successful logons (4624)
+                        |
+                        +-- Group by account type and computer
+                                |
+                                +-- Count successful logons in each group
+```
+
+> **Why this is useful:** It helps identify which account types are logging into which devices and highlights unusually high logon activity.
+
+<img width="1898" height="758" alt="image" src="https://github.com/user-attachments/assets/28edc586-1441-4086-8cc1-f93133f2339c" />
 
 ### Count distinct IP addresses
 
@@ -215,6 +377,47 @@ SigninLogs_CL
 | where TimeGenerated > ago(5d)
 | summarize dcount(IPAddress)
 ```
+### In Plain English
+
+> Estimate how many **different IP addresses** attempted to sign in during the last **five days**.
+
+```kql
+SigninLogs_CL
+```
+
+Start with the `SigninLogs_CL` sign-in log table.
+
+```kql
+| where TimeGenerated > ago(5d)
+```
+
+Keep only sign-in events from the last **five days**.
+
+```kql
+| summarize dcount(IPAddress)
+```
+
+Count the number of **distinct** IP addresses in those results.
+
+`dcount()` means **distinct count**. It provides an approximate count, which is usually faster and suitable when working with large log volumes.
+
+Example result:
+
+| dcount_IPAddress |
+|---:|
+| 143 |
+
+```text
+All sign-in events
+        |
+        +-- Keep events from the last 5 days
+                |
+                +-- Count unique IP addresses
+```
+
+> **Why this is useful:** A sudden increase in unique source IP addresses can indicate unusual access activity, password spraying, distributed attacks, or a large number of users connecting through different networks.
+
+<img width="1910" height="810" alt="image" src="https://github.com/user-attachments/assets/89144ae6-1eab-48a7-99b8-ffd1d9b9a611" />
 
 ### Find disabled-account attempts
 
@@ -227,6 +430,85 @@ SigninLogs_CL
 | summarize applicationCount = dcount(AppDisplayName_s) by UserPrincipalName_s, IPAddress
 | where applicationCount >= threshold
 ```
+### In Plain English
+
+> Find disabled user accounts that attempted to sign in during the last **30 days**, then show which applications they tried to access and from which IP addresses.
+
+```kql
+let timeframe = 30d;
+```
+
+Create a variable called `timeframe` and set it to **30 days**.
+
+```kql
+let threshold = 1;
+```
+
+Create a variable called `threshold` and set it to `1`.
+
+This means an account is included if it attempted to access at least **one distinct application**.
+
+```kql
+SigninLogs_CL
+```
+
+Start with the `SigninLogs_CL` sign-in log table.
+
+```kql
+| where TimeGenerated >= ago(timeframe)
+```
+
+Keep only sign-in attempts from the last **30 days**.
+
+```kql
+| where ResultDescription has "User account is disabled"
+```
+
+Keep only events where the sign-in failed because the account is disabled.
+
+```kql
+| summarize applicationCount = dcount(AppDisplayName_s) by UserPrincipalName_s, IPAddress
+```
+
+Group the remaining events by:
+
+- `UserPrincipalName_s` — the disabled account that attempted sign-in
+- `IPAddress` — the source IP address used
+
+For each account-and-IP combination, count the approximate number of **different applications** targeted. Store this number in `applicationCount`.
+
+```kql
+| where applicationCount >= threshold
+```
+
+Show only results with at least one targeted application.
+
+Because the threshold is `1`, this final filter does not remove much; every matching event should already involve at least one application.
+
+Example result:
+
+| UserPrincipalName_s | IPAddress | applicationCount |
+|---|---|---:|
+| `former.employee@company.com` | `203.0.113.10` | 3 |
+| `disabled.admin@company.com` | `198.51.100.25` | 1 |
+
+```text
+All sign-in events
+        |
+        +-- Keep events from the last 30 days
+                |
+                +-- Keep failures caused by disabled accounts
+                        |
+                        +-- Group by account and source IP
+                                |
+                                +-- Count distinct applications targeted
+                                        |
+                                        +-- Keep results meeting the threshold
+```
+
+> **Why this is useful:** A disabled account attempting to sign in may be expected—for example, from an old device with cached credentials—or suspicious, such as an attacker continuing to use stolen credentials after the account was disabled.
+
+<img width="1907" height="796" alt="image" src="https://github.com/user-attachments/assets/f7f26965-31dd-40e5-a928-396d7bcf6eb3" />
 
 ***
 
