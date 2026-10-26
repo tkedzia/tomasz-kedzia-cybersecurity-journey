@@ -246,6 +246,8 @@ You confirmed that Microsoft Sentinel can receive security data from Microsoft D
 # Learning Path 7 — Lab 1, Exercise 2  
 ## Connect Windows Devices to Microsoft Sentinel
 
+<img width="1280" height="720" alt="image" src="https://github.com/user-attachments/assets/82078331-d08d-4b45-b49b-2ef50229da9e" />
+
 ## Purpose
 
 Connect Windows devices to Microsoft Sentinel so their Windows security events can be collected, stored, searched, and used for detections and investigations.
@@ -363,7 +365,11 @@ Create
 
 4. Wait for deployment to finish.
 
-> Screenshot placeholder: *Windows 11 VM configuration before creation.*  
+> Screenshot placeholder: *Windows 11 VM configuration before creation.*
+> <img width="1902" height="902" alt="image" src="https://github.com/user-attachments/assets/4a3bc297-58d9-43c9-85d9-3b37da409c49" />
+<img width="1885" height="896" alt="image" src="https://github.com/user-attachments/assets/e81b85b7-39ac-413a-b3b7-3e0b6dc330aa" />
+<img width="1888" height="861" alt="image" src="https://github.com/user-attachments/assets/ab03bde6-aee2-46d1-a575-66dd664a3b77" />
+
 > Screenshot placeholder: *Successful Azure VM deployment.*  
 > Screenshot placeholder: *AZWIN VM visible in ResourceGroup1.*
 
