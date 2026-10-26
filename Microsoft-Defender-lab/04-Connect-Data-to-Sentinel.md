@@ -433,10 +433,11 @@ Agent status: Connected
 ```
 
 `azcmagent show` displays the Connected Machine agent’s current connection state and Azure resource details. [learn.microsoft](https://learn.microsoft.com/en-us/azure/azure-arc/servers/azcmagent-show)
-
-> Screenshot placeholder: *Azure Arc sign-in / authentication completed.*  
-> Screenshot placeholder: *`azcmagent show` output showing Agent status: Connected.*  
+ 
+> Screenshot placeholder: *`azcmagent show` output showing Agent status: Connected.*
+> <img width="1894" height="900" alt="image" src="https://github.com/user-attachments/assets/aa523b56-f451-4749-8c86-7ac930cca805" />
 > Screenshot placeholder: *WINServer visible as an Azure Arc-enabled server.*
+> <img width="1880" height="938" alt="image" src="https://github.com/user-attachments/assets/b6e4d91c-c253-4777-8907-4844a5adcb87" />
 
 ***
 
@@ -549,10 +550,7 @@ Next: Review + create
 
 DCRs define the data to collect from agents and the machines to which the collection configuration applies. Selecting **All Security Events** collects the full Windows Security event set through the connector. [docs.azure](https://docs.azure.cn/en-us/sentinel/connect-services-windows-based)
 
-> Screenshot placeholder: *Windows Security Events via AMA connector page.*  
-> Screenshot placeholder: *DCR resources page with AZWIN VM selected.*  
-> Screenshot placeholder: *DCR set to All Security Events.*  
-> Screenshot placeholder: *Created DCR listed in connector configuration.*
+<img width="1902" height="899" alt="image" src="https://github.com/user-attachments/assets/476107cd-d271-4fd2-a209-38963409cc1a" />
 
 ***
 
@@ -607,8 +605,9 @@ Next: Collect
 Create
 ```
 
-> Screenshot placeholder: *WINServer selected as a DCR resource.*  
 > Screenshot placeholder: *Updated DCR successfully created / validated.*
+> <img width="1884" height="927" alt="image" src="https://github.com/user-attachments/assets/ee15e468-2cd7-43d3-b5fe-c4fe438b748b" />
+
 
 ***
 
