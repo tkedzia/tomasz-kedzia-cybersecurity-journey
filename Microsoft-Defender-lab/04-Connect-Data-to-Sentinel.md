@@ -1,5 +1,6 @@
 # Learning Path 7 — Lab 1, Exercise 1  
 ## Connect Data to Microsoft Sentinel Using Data Connectors
+<img width="1280" height="720" alt="image" src="https://github.com/user-attachments/assets/9a19d6f2-e485-431d-a5cb-26d19903dd1a" />
 
 ## Purpose
 
