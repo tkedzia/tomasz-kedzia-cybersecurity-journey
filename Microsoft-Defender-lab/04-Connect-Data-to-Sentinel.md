@@ -368,10 +368,11 @@ Create
 > Screenshot placeholder: *Windows 11 VM configuration before creation.*
 > <img width="1902" height="902" alt="image" src="https://github.com/user-attachments/assets/4a3bc297-58d9-43c9-85d9-3b37da409c49" />
 <img width="1885" height="896" alt="image" src="https://github.com/user-attachments/assets/e81b85b7-39ac-413a-b3b7-3e0b6dc330aa" />
-<img width="1888" height="861" alt="image" src="https://github.com/user-attachments/assets/ab03bde6-aee2-46d1-a575-66dd664a3b77" />
-
-> Screenshot placeholder: *Successful Azure VM deployment.*  
+<img width="1897" height="815" alt="image" src="https://github.com/user-attachments/assets/456f0a20-91c8-4d8b-9110-6c47e4aa05ce" />
+> Screenshot placeholder: *Successful Azure VM deployment.*
+> <img width="1911" height="829" alt="image" src="https://github.com/user-attachments/assets/8550e6e0-2ef2-40fc-8db5-0417be7c01af" />
 > Screenshot placeholder: *AZWIN VM visible in ResourceGroup1.*
+> <img width="1908" height="826" alt="image" src="https://github.com/user-attachments/assets/271fcde5-b9fc-4f42-9ba2-22aa1e6869b0" />
 
 ***
 
