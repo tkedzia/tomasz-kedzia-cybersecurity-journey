@@ -242,3 +242,411 @@ The Azure Activity connector is fully integrated into Defender XDR.
 # Plain-English Takeaway
 
 You confirmed that Microsoft Sentinel can receive security data from Microsoft Defender for Cloud and Azure Activity logs. You checked that both connectors were **connected**, identified which log tables hold their data, reviewed retention settings, and verified that UEBA was enabled for Azure Activity.
+
+# Learning Path 7 — Lab 1, Exercise 2  
+## Connect Windows Devices to Microsoft Sentinel
+
+## Purpose
+
+Connect Windows devices to Microsoft Sentinel so their Windows security events can be collected, stored, searched, and used for detections and investigations.
+
+This lab covered:
+
+- Creating an Azure-hosted Windows 11 virtual machine.
+- Connecting a non-Azure Windows server through **Azure Arc**.
+- Using the **Windows Security Events via AMA** connector.
+- Creating a **Data Collection Rule (DCR)** to collect Windows security events.
+
+> **Lab note:** This is a shared, standalone environment. Coordinate with other learners before creating or changing resources. Leaving the lab may require repeating the work.
+
+***
+
+# Key Concepts
+
+| Term | Plain-English meaning |
+|---|---|
+| Azure Arc | Connects non-Azure servers to Azure management services. |
+| Azure Monitor Agent (AMA) | Agent that collects monitoring and security data from a machine. |
+| Data Collection Rule (DCR) | Configuration that defines **which machines** send data and **which events** they send. |
+| Windows Security Events via AMA | Sentinel connector that collects Windows Security event logs through AMA. |
+| `SecurityEvent` table | Sentinel table that stores Windows Security event data collected through this connector. |
+| Azure VM | A virtual machine running inside Azure. |
+| Non-Azure machine | A server located on-premises or in another cloud; it needs Azure Arc before AMA-based Sentinel collection can be configured. |
+
+The Azure Arc Connected Machine agent connects a non-Azure server to Azure, while AMA is a separate agent used to collect monitoring data. [learn.microsoft](https://learn.microsoft.com/en-us/azure/azure-arc/servers/agent-overview)
+
+***
+
+# Task 1 — Create an Azure Windows VM
+
+## Purpose
+
+Create a Windows 11 virtual machine in Azure that will later be connected to Microsoft Sentinel.
+
+## Access Azure
+
+1. Sign in to `WIN1` as `Admin`.
+2. Open Microsoft Edge.
+3. Navigate to:
+
+```text
+https://portal.azure.com
+```
+
+4. Sign in with the provided tenant account, password, or Temporary Access Pass (TAP).
+
+## Create the VM
+
+1. Select:
+
+```text
++ Create a resource
+```
+
+2. Search for:
+
+```text
+Windows 11
+```
+
+3. Select the Windows 11 offer.
+
+4. Configure:
+
+| Setting | Lab value |
+|---|---|
+| Subscription | `PROD-CSS-MOCTAP-lod53406000` |
+| Plan | `Windows 11 Enterprise, version 24H2` |
+| Preset configuration | `Dev/Test` |
+| Resource group | `ResourceGroup1` |
+| Virtual machine name | `AZWIN-66624652` |
+| Region | `(US) East US` |
+| Image | `Windows 11 Enterprise, version 24H2` |
+| VM size | `Standard_D2s_v3` |
+| Username | A unique non-reserved name |
+| Password | A strong password |
+| Licensing | Confirm eligible license |
+
+> Use a unique VM name in shared environments, for example `AZWIN-[initials][number]`.
+
+## VM Size / Deployment Notes
+
+If `Standard_D2s_v3` is unavailable, try:
+
+```text
+Standard_D2s_v5
+Standard_D2as_v5
+Standard_D2s_v6
+```
+
+If Automanage causes an image-support error:
+
+```text
+Management tab
+> Disable Automanage
+```
+
+## Create
+
+1. Select:
+
+```text
+Review + create
+```
+
+2. Wait for validation to pass.
+3. Select:
+
+```text
+Create
+```
+
+4. Wait for deployment to finish.
+
+> Screenshot placeholder: *Windows 11 VM configuration before creation.*  
+> Screenshot placeholder: *Successful Azure VM deployment.*  
+> Screenshot placeholder: *AZWIN VM visible in ResourceGroup1.*
+
+***
+
+# Task 2 — Connect Non-Azure Server with Azure Arc
+
+## Purpose
+
+Connect the on-premises-style `WINServer` virtual machine to the Azure subscription using Azure Arc.
+
+This makes the non-Azure server manageable in Azure and allows it to be selected for AMA-based Microsoft Sentinel data collection. Azure Arc is required before using the AMA Windows Security Events connector for machines outside Azure. [learn.microsoft](https://learn.microsoft.com/en-us/azure/azure-arc/servers/scenario-onboard-azure-sentinel)
+
+## Access the Server
+
+1. Switch to the `WINServer` virtual machine.
+2. Sign in as:
+
+```text
+Username: Administrator
+Password: Passw0rd!
+```
+
+3. Open an elevated Command Prompt:
+
+```text
+Search > cmd
+> Right-click Command Prompt
+> Run as administrator
+```
+
+## Connect Azure Arc
+
+Run:
+
+```cmd
+azcmagent connect -g "ResourceGroup1" -l "CentralUS" -s "02ab4807-5d28-4850-af2c-d9bfbaccd949"
+```
+
+If prompted to choose a browser, select:
+
+```text
+Microsoft Edge
+```
+
+Sign in using the lab tenant credentials, wait for authentication to complete, then close the browser tab and return to Command Prompt.
+
+## Verify Connection
+
+Run:
+
+```cmd
+azcmagent show
+```
+
+Confirm the output contains:
+
+```text
+Agent status: Connected
+```
+
+`azcmagent show` displays the Connected Machine agent’s current connection state and Azure resource details. [learn.microsoft](https://learn.microsoft.com/en-us/azure/azure-arc/servers/azcmagent-show)
+
+> Screenshot placeholder: *Azure Arc sign-in / authentication completed.*  
+> Screenshot placeholder: *`azcmagent show` output showing Agent status: Connected.*  
+> Screenshot placeholder: *WINServer visible as an Azure Arc-enabled server.*
+
+***
+
+# Task 3 — Connect Azure Windows VM to Sentinel
+
+## Purpose
+
+Configure Sentinel to collect Windows Security events from the Azure VM using a DCR.
+
+## Open the Connector
+
+1. On `WIN1`, open:
+
+```text
+https://security.microsoft.com
+```
+
+2. Navigate to:
+
+```text
+Microsoft Sentinel
+> Content management
+> Content hub
+```
+
+3. Search for:
+
+```text
+Windows Security Events
+```
+
+4. Open the solution and select:
+
+```text
+Manage
+```
+
+## Solution Content
+
+The solution includes:
+
+| Content | Quantity |
+|---|---:|
+| Windows Security Events via AMA connector | 1 |
+| Security Events via Legacy Agent connector | 1 |
+| Workbooks | 2 |
+| Analytics rules | 20 |
+| Hunting queries | 43 |
+
+## Create a Data Collection Rule
+
+1. Select:
+
+```text
+Windows Security Events via AMA
+> Open connector page
+```
+
+2. Under **Configuration**, select:
+
+```text
++ Create data collection rule
+```
+
+3. Enter a unique rule name, for example:
+
+```text
+AZWIN[student-number]DCR
+```
+
+4. Select:
+
+```text
+Next: Resources
+```
+
+5. Expand:
+
+```text
+MOC Subscription
+> ResourceGroup1
+```
+
+6. Select your Azure VM:
+
+```text
+AZWIN-66624652
+```
+
+7. Select:
+
+```text
+Next: Collect
+```
+
+8. Keep the default collection setting:
+
+```text
+All Security Events
+```
+
+9. Select:
+
+```text
+Next: Review + create
+> Create
+```
+
+10. Wait briefly and select **Refresh** to confirm the DCR appears.
+
+DCRs define the data to collect from agents and the machines to which the collection configuration applies. Selecting **All Security Events** collects the full Windows Security event set through the connector. [docs.azure](https://docs.azure.cn/en-us/sentinel/connect-services-windows-based)
+
+> Screenshot placeholder: *Windows Security Events via AMA connector page.*  
+> Screenshot placeholder: *DCR resources page with AZWIN VM selected.*  
+> Screenshot placeholder: *DCR set to All Security Events.*  
+> Screenshot placeholder: *Created DCR listed in connector configuration.*
+
+***
+
+# Task 4 — Add the Non-Azure Windows Server
+
+## Purpose
+
+Add the Azure Arc-connected `WINServer` to the existing DCR so Sentinel collects its Windows Security events too.
+
+## Update the DCR
+
+1. Stay in:
+
+```text
+Windows Security Events via AMA
+> Configuration
+```
+
+2. Find the DCR created in Task 3.
+
+3. Select the **pencil icon** to edit it.
+
+4. Select:
+
+```text
+Next: Resources
+```
+
+5. Expand:
+
+```text
+MOC Subscription
+> ResourceGroup1
+```
+
+6. Select:
+
+```text
+WINServer
+```
+
+7. Select:
+
+```text
+Next: Collect
+> Next: Review + create
+```
+
+8. After **Validation passed**, select:
+
+```text
+Create
+```
+
+> Screenshot placeholder: *WINServer selected as a DCR resource.*  
+> Screenshot placeholder: *Updated DCR successfully created / validated.*
+
+***
+
+# Data Flow
+
+```text
+Azure VM (AZWIN)
+        |
+        | Windows Security events
+        v
+Azure Monitor Agent
+        |
+        v
+Data Collection Rule
+        |
+        v
+Windows Security Events via AMA connector
+        |
+        v
+Microsoft Sentinel SecurityEvent table
+```
+
+```text
+Non-Azure WINServer
+        |
+        | Azure Arc connection
+        v
+Azure Arc-enabled server
+        |
+        | Azure Monitor Agent + DCR
+        v
+Windows Security Events via AMA connector
+        |
+        v
+Microsoft Sentinel SecurityEvent table
+```
+
+***
+
+# Key Takeaways
+
+- Azure VMs can be selected directly in a Microsoft Sentinel DCR.
+- Non-Azure Windows servers need an active **Azure Arc** connection before they can use the AMA-based Windows Security Events connector. [learn.microsoft](https://learn.microsoft.com/en-us/azure/azure-arc/servers/scenario-onboard-azure-sentinel)
+- `azcmagent connect` registers a server with Azure Arc.
+- `azcmagent show` confirms whether the Azure Arc agent is connected. [learn.microsoft](https://learn.microsoft.com/en-us/azure/azure-arc/servers/azcmagent)
+- The DCR determines which computers send data and what type of Windows Security events are collected.
+- Choosing **All Security Events** provides the broadest visibility but can increase data ingestion and storage costs.
+- Collected Windows security logs are written to the Sentinel `SecurityEvent` table. [docs.azure](https://docs.azure.cn/en-us/azure-monitor/vm/data-collection-windows-events)
