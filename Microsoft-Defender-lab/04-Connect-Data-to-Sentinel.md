@@ -658,7 +658,7 @@ Microsoft Sentinel SecurityEvent table
 - Collected Windows security logs are written to the Sentinel `SecurityEvent` table. [docs.azure](https://docs.azure.cn/en-us/azure-monitor/vm/data-collection-windows-events)
 # Learning Path 7 — Lab 1, Exercise 3  
 ## Connect Linux Hosts to Microsoft Sentinel
-
+<img width="1280" height="720" alt="image" src="https://github.com/user-attachments/assets/201c9cc9-f402-4fd8-b15c-a6d54a7faf28" />
 ## Purpose
 
 Connect Linux hosts to Microsoft Sentinel and collect security logs through:
@@ -713,8 +713,6 @@ https://security.microsoft.com
 
 4. Sign in with the provided tenant credentials or Temporary Access Pass (TAP).
 
-> Screenshot placeholder: *Microsoft Defender XDR portal opened successfully.*
-
 ***
 
 # Task 2 — Connect Linux Host with CEF via AMA
@@ -735,6 +733,7 @@ LIN1 username: ________________________
 ```
 
 > Screenshot placeholder: *LIN1 login screen / desktop showing the IP address.*
+> <img width="1304" height="917" alt="image" src="https://github.com/user-attachments/assets/c2c2b3af-325a-4d1c-9b3b-0fb71fc87429" />
 
 ## Connect to LIN1 over SSH
 
