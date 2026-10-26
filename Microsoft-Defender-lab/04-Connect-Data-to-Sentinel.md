@@ -42,6 +42,7 @@ https://security.microsoft.com
 5. If requested, use the provided **Temporary Access Pass (TAP)**.
 
 > Screenshot placeholder: *Signed in to Microsoft Defender XDR / Sentinel environment.*
+> <img width="1902" height="948" alt="image" src="https://github.com/user-attachments/assets/bef5b9a4-5dfb-4141-bff4-9c63bac9bd15" />
 
 ***
 
@@ -114,8 +115,8 @@ SecurityAlert
 
 table.
 
-> Screenshot placeholder: *Tenant-based Microsoft Defender for Cloud connector showing Connected status.*  
-> Screenshot placeholder: *Connector details showing the SecurityAlert table.*
+> Screenshot placeholder: *Tenant-based Microsoft Defender for Cloud connector showing Connected status.*
+> <img width="1902" height="1052" alt="image" src="https://github.com/user-attachments/assets/703c4ca0-d22d-4515-8b3c-89f5e5e34da8" />
 
 ***
 
@@ -210,9 +211,12 @@ AzureActivity
 
 The Azure Activity connector is fully integrated into Defender XDR.
 
-> Screenshot placeholder: *Azure Activity connector showing Connected status.*  
-> Screenshot placeholder: *AzureActivity table retention settings.*  
+> Screenshot placeholder: *Azure Activity connector showing Connected status.*
+> <img width="1910" height="867" alt="image" src="https://github.com/user-attachments/assets/1c20ca36-1e40-40f2-bc50-8b6f79a9c9ca" />
+> Screenshot placeholder: *AzureActivity table retention settings.*
+> <img width="1891" height="845" alt="image" src="https://github.com/user-attachments/assets/181549dc-8cd4-4e80-82a5-6d7af89f8f79" />
 > Screenshot placeholder: *UEBA enabled for Azure Activity.*
+> <img width="1892" height="851" alt="image" src="https://github.com/user-attachments/assets/e2ddcbf7-14ee-4c99-a28a-ab63be3ca27d" />
 
 ***
 
