@@ -19,8 +19,6 @@ Onboard a Microsoft Sentinel workspace to Microsoft Defender XDR.
 
 **Purpose:** Use Defender XDR as a unified portal for Sentinel investigation, hunting, threat intelligence, and incident workflows.
 
-> Screenshot placeholder: *Sentinel workspace connected to Defender XDR.*
-
 ***
 
 # Task 1 — Create a Watchlist
@@ -56,7 +54,7 @@ Documents\HighValue.csv
 Save as type: All files
 ```
 
-> Screenshot placeholder: *HighValue.csv created in Documents.*
+<img width="1918" height="781" alt="image" src="https://github.com/user-attachments/assets/1477d4c7-3a0a-4b90-87cd-81574892c197" />
 
 ## Create the Sentinel watchlist
 
@@ -141,8 +139,10 @@ SecurityEvent_CL
 - A watchlist is useful for high-value assets, privileged accounts, known bad IPs, VIP users, service accounts, or approved administrative tools.
 - The **SearchKey** is the primary field used when matching watchlist entries in KQL.
 
-> Screenshot placeholder: *HighValueHosts watchlist visible in Sentinel.*  
+> Screenshot placeholder: *HighValueHosts watchlist visible in Sentinel.*
+> <img width="1912" height="816" alt="image" src="https://github.com/user-attachments/assets/42d639a7-4498-4282-b299-9b1c01b35cec" />
 > Screenshot placeholder: *Watchlist query results in Advanced Hunting.*
+<img width="1912" height="821" alt="image" src="https://github.com/user-attachments/assets/f35e18de-45fb-42e9-ba54-ada3a3db07ec" />
 
 ***
 
@@ -218,9 +218,10 @@ ThreatIntelIndicators
 - Threat indicators can take up to **five minutes** to appear.
 - `ObservableValue` contains the actual observable, such as a domain, IP address, URL, or hash.
 - Threat intelligence supports hunting, detections, enrichment, and incident investigations.
-
-> Screenshot placeholder: *Threat intelligence indicator created.*  
+ 
 > Screenshot placeholder: *ThreatIntelIndicators query result showing ObservableValue.*
+<img width="1911" height="1047" alt="image" src="https://github.com/user-attachments/assets/b967a283-bfc3-4f92-b093-7efb7acab1c6" />
+<img width="1917" height="1078" alt="image" src="https://github.com/user-attachments/assets/66c9be9e-0cb9-4235-8724-1fe5df8bc274" />
 
 ***
 
@@ -295,8 +296,7 @@ Retention: 180 days
 - Longer retention improves investigation and compliance capability but can increase storage costs.
 - Retention requirements should consider regulations, incident-investigation needs, organizational risk, and budget.
 
-> Screenshot placeholder: *SecurityEvent_CL analytics retention set to 90 days.*  
-> Screenshot placeholder: *Data lake tier retention set to 180 days.*
+<img width="1918" height="1055" alt="image" src="https://github.com/user-attachments/assets/1e9873f4-8461-4de4-bea1-0bce3a61cf91" />
 
 ***
 
