@@ -656,3 +656,520 @@ Microsoft Sentinel SecurityEvent table
 - The DCR determines which computers send data and what type of Windows Security events are collected.
 - Choosing **All Security Events** provides the broadest visibility but can increase data ingestion and storage costs.
 - Collected Windows security logs are written to the Sentinel `SecurityEvent` table. [docs.azure](https://docs.azure.cn/en-us/azure-monitor/vm/data-collection-windows-events)
+# Learning Path 7 — Lab 1, Exercise 3  
+## Connect Linux Hosts to Microsoft Sentinel
+
+## Purpose
+
+Connect Linux hosts to Microsoft Sentinel and collect security logs through:
+
+- **CEF via AMA** for Common Event Format security-device logs.
+- **Syslog via AMA** for standard Linux Syslog events.
+- **Azure Arc** for managing non-Azure Linux machines.
+- **Data Collection Rules (DCRs)** for defining sources and log severity levels.
+
+> **Lab note:** This is a standalone environment. Do not exit before finishing, or the configuration may need to be repeated.
+
+***
+
+# Key Concepts
+
+| Term | Meaning |
+|---|---|
+| Azure Arc | Connects non-Azure Linux servers to Azure management services. |
+| `azcmagent connect` | Registers a server with Azure Arc. |
+| `azcmagent show` | Displays Azure Arc agent status. |
+| Azure Monitor Agent (AMA) | Agent that collects and sends logs to Microsoft Sentinel. |
+| Data Collection Rule (DCR) | Defines monitored machines and the logs that should be collected. |
+| CEF | Security-log format commonly used by firewalls, proxies, IDS/IPS, and other security products. |
+| Syslog | Standard Linux and network-device logging protocol. |
+| `CommonSecurityLog` | Sentinel table where CEF events are stored. |
+| `Syslog` | Sentinel table where standard Syslog events are stored. |
+
+CEF is a standard format built on Syslog, designed to make security events from different vendors easier to process and correlate. [learn.microsoft](https://learn.microsoft.com/ka-ge/azure/sentinel/data-connectors/common-event-format-cef-via-ama)
+DCRs define monitored systems and the types of Syslog or CEF messages to collect; CEF data is written to `CommonSecurityLog`, while regular Syslog data is written to `Syslog`. [learn.microsoft](https://learn.microsoft.com/en-us/azure/sentinel/connect-cef-syslog-ama)
+
+***
+
+# Task 1 — Access Microsoft Sentinel
+
+## Environment
+
+- **Windows management VM:** `WIN1`
+- **Linux CEF host:** `LIN1`
+- **Linux Syslog host:** `LIN2`
+- **Sentinel workspace:** `sentinelworkspace-01`
+- **Portal:** `https://security.microsoft.com`
+
+## Steps
+
+1. Sign in to `WIN1` as `Admin`.
+2. Open Microsoft Edge.
+3. Navigate to:
+
+```text
+https://security.microsoft.com
+```
+
+4. Sign in with the provided tenant credentials or Temporary Access Pass (TAP).
+
+> Screenshot placeholder: *Microsoft Defender XDR portal opened successfully.*
+
+***
+
+# Task 2 — Connect Linux Host with CEF via AMA
+
+## Purpose
+
+Connect `LIN1` to Azure Arc, then configure the **Common Event Format (CEF) via AMA** connector to collect CEF events.
+
+## Record Linux Host Details
+
+1. Start `LIN1`.
+2. Sign in using the supplied Linux credentials.
+3. Record the `LIN1` IP address and Linux username.
+
+```text
+LIN1 IP address: ______________________
+LIN1 username: ________________________
+```
+
+> Screenshot placeholder: *LIN1 login screen / desktop showing the IP address.*
+
+## Connect to LIN1 over SSH
+
+On `WIN1`, open **Windows PowerShell** and run:
+
+```powershell
+ssh <LIN1-IP-address> -l <Linux-username>
+```
+
+Example:
+
+```powershell
+ssh 192.168.1.10 -l student
+```
+
+1. Type:
+
+```text
+yes
+```
+
+to accept the SSH host key.
+
+2. Enter the Linux password.
+
+> Screenshot placeholder: *Successful SSH connection from WIN1 to LIN1.*
+
+## Connect LIN1 to Azure Arc
+
+From the SSH session, run:
+
+```bash
+azcmagent connect -g "ResourceGroup1" -l "CentralUS" -s "02ab4807-5d28-4850-af2c-d9bfbaccd949"
+```
+
+When prompted:
+
+1. Open the device-login page:
+
+```text
+https://microsoft.com/devicelogin
+```
+
+2. Enter the device code shown in the terminal.
+3. Sign in using the lab tenant account.
+4. Wait for the **Authentication complete** message.
+5. Close the browser tab and return to PowerShell.
+
+Verify the connection:
+
+```bash
+azcmagent show
+```
+
+Confirm:
+
+```text
+Agent status: Connected
+```
+
+`azcmagent connect` connects the machine to Azure Arc, and `azcmagent show` displays the current agent status. [learn.microsoft](https://learn.microsoft.com/en-us/azure/azure-arc/servers/azcmagent)
+
+> Screenshot placeholder: *Azure device-login authentication completed.*  
+> Screenshot placeholder: *LIN1 `azcmagent show` output showing `Agent status: Connected`.*
+
+## Configure CEF via AMA
+
+1. Return to Defender XDR:
+
+```text
+Microsoft Sentinel
+> Content management
+> Content hub
+```
+
+2. Search for:
+
+```text
+Common Event Format
+```
+
+3. Open the solution and select:
+
+```text
+Manage
+```
+
+4. Select:
+
+```text
+Common Events Format (CEF) via AMA
+> Open connector page
+```
+
+5. Under **Configuration**, select:
+
+```text
++ Create data collection rule
+```
+
+6. Enter a unique rule name:
+
+```text
+AZLIN[student-number]DCR
+```
+
+7. Select:
+
+```text
+Next: Resources
+```
+
+8. Expand:
+
+```text
+MOC Subscription
+> ResourceGroup1
+```
+
+9. Select the Linux host:
+
+```text
+ubuntu1
+```
+
+> The host may use a different name, such as `ubuntu[unique-number]`.
+
+10. Select:
+
+```text
+Next: Collect
+```
+
+11. Configure collection level:
+
+```text
+LOG_ALERT
+> LOG_WARNING
+```
+
+12. Select:
+
+```text
+Next: Review + create
+> Create
+```
+
+13. Wait for deployment, refresh if necessary, and confirm the connector status is:
+
+```text
+Connected
+```
+
+The CEF solution includes both AMA and legacy-agent connectors; this lab uses the **CEF via AMA** connector. The DCR installs AMA, while the CEF collector commands were already deployed on `LIN1`. [learn.microsoft](https://learn.microsoft.com/en-us/azure/sentinel/cef-syslog-ama-overview)
+
+> Screenshot placeholder: *CEF via AMA connector page.*  
+> Screenshot placeholder: *CEF DCR resource selection with LIN1 / ubuntu1 selected.*  
+> Screenshot placeholder: *CEF collection level set from LOG_ALERT to LOG_WARNING.*  
+> Screenshot placeholder: *CEF via AMA connector showing Connected.*
+
+## Verify CEF Listener
+
+Return to the still-open `LIN1` SSH session and run:
+
+```bash
+netstat -lnptv
+```
+
+Verify that `rsyslog` or `syslog-ng` is listening on:
+
+```text
+Port 514
+```
+
+Port `514` is the conventional Syslog port used by CEF/Syslog forwarding in the lab setup.
+
+CEF logs can be queried in:
+
+```kql
+CommonSecurityLog
+```
+
+Close the remote session:
+
+```bash
+exit
+```
+
+> Screenshot placeholder: *`netstat -lnptv` output showing rsyslog or syslog-ng listening on port 514.*
+
+***
+
+# Task 3 — Connect Linux Host with Syslog via AMA
+
+## Purpose
+
+Connect `LIN2` to Azure Arc, then configure the **Syslog via AMA** connector to collect Linux Syslog events.
+
+## Record LIN2 Details
+
+1. Start `LIN2`.
+2. Sign in with supplied Linux credentials.
+3. Record the IP address and username.
+
+```text
+LIN2 IP address: ______________________
+LIN2 username: ________________________
+```
+
+> Screenshot placeholder: *LIN2 login screen / desktop showing the IP address.*
+
+## Connect to LIN2 Over SSH
+
+On `WIN1`, open PowerShell and run:
+
+```powershell
+ssh <LIN2-IP-address> -l <Linux-username>
+```
+
+1. Type `yes` when asked to trust the host key.
+2. Enter the Linux password.
+
+> Screenshot placeholder: *Successful SSH connection from WIN1 to LIN2.*
+
+## Connect LIN2 to Azure Arc
+
+From the LIN2 SSH session, run:
+
+```bash
+azcmagent connect -g "ResourceGroup1" -l "CentralUS" -s "02ab4807-5d28-4850-af2c-d9bfbaccd949"
+```
+
+Use device login:
+
+```text
+https://microsoft.com/devicelogin
+```
+
+Enter the terminal-provided code, authenticate with the tenant account, and return to the SSH session.
+
+Verify:
+
+```bash
+azcmagent show
+```
+
+Expected output:
+
+```text
+Agent status: Connected
+```
+
+> Screenshot placeholder: *LIN2 Azure Arc device-login authentication completed.*  
+> Screenshot placeholder: *LIN2 `azcmagent show` output showing `Agent status: Connected`.*
+
+## Configure Syslog via AMA
+
+1. In Defender XDR, open:
+
+```text
+Microsoft Sentinel
+> Content management
+> Content hub
+```
+
+2. Search for:
+
+```text
+Syslog
+```
+
+3. Open the **Syslog** solution and select:
+
+```text
+Manage
+```
+
+4. Select:
+
+```text
+Syslog via AMA
+> Open connector page
+```
+
+5. Under **Configuration**, select:
+
+```text
++ Create data collection rule
+```
+
+6. Enter a unique DCR name:
+
+```text
+AZLIN[student-number]DCR2
+```
+
+7. Select:
+
+```text
+Next: Resources
+```
+
+8. Expand:
+
+```text
+MOC Subscription
+> ResourceGroup1
+```
+
+9. Select:
+
+```text
+ubuntu2
+```
+
+> The host may appear under a different `ubuntu...` name.
+
+10. Select:
+
+```text
+Next: Collect
+```
+
+11. Configure collection:
+
+```text
+LOG_ALERT
+> LOG_WARNING
+```
+
+12. Select:
+
+```text
+Next: Review + create
+> Create
+```
+
+13. Wait for deployment, refresh the connector page if needed, and confirm:
+
+```text
+Syslog via AMA: Connected
+```
+
+The Syslog solution installs two data connectors, analytics rules, hunting queries, parsers, and workbooks. This lab uses the **Syslog via AMA** connector; the AMA Forwarder installation commands were predeployed on `LIN2`. [learn.microsoft](https://learn.microsoft.com/en-us/azure/sentinel/connect-cef-syslog-ama)
+
+> Screenshot placeholder: *Syslog via AMA connector page.*  
+> Screenshot placeholder: *Syslog DCR resource selection with LIN2 / ubuntu2 selected.*  
+> Screenshot placeholder: *Syslog collection level set to LOG_WARNING.*  
+> Screenshot placeholder: *Syslog via AMA connector showing Connected.*
+
+## Verify Syslog Listener
+
+Return to the active `LIN2` SSH session and run:
+
+```bash
+netstat -lnptv
+```
+
+Confirm that `rsyslog` or `syslog-ng` is listening on:
+
+```text
+Port 514
+```
+
+Query collected Syslog data in Sentinel:
+
+```kql
+Syslog
+```
+
+Exit the Linux session:
+
+```bash
+exit
+```
+
+> Screenshot placeholder: *`netstat -lnptv` output showing rsyslog or syslog-ng listening on port 514.*
+
+***
+
+# Data Flow
+
+## CEF
+
+```text
+Security device / Linux CEF events
+        |
+        v
+LIN1 rsyslog or syslog-ng listener
+        |
+        v
+CEF collector + Azure Monitor Agent
+        |
+        v
+CEF via AMA Data Collection Rule
+        |
+        v
+Microsoft Sentinel
+        |
+        v
+CommonSecurityLog table
+```
+
+## Syslog
+
+```text
+Linux Syslog events
+        |
+        v
+LIN2 rsyslog or syslog-ng listener
+        |
+        v
+AMA Forwarder + Azure Monitor Agent
+        |
+        v
+Syslog via AMA Data Collection Rule
+        |
+        v
+Microsoft Sentinel
+        |
+        v
+Syslog table
+```
+
+***
+
+# Key Takeaways
+
+| Topic | Key Point |
+|---|---|
+| Azure Arc | Enables management of non-Azure Linux hosts in Azure. |
+| CEF via AMA | Collects CEF-formatted security logs into `CommonSecurityLog`. |
+| Syslog via AMA | Collects standard Linux Syslog events into `Syslog`. |
+| DCR | Specifies monitored resources and the severity/log levels collected. |
+| `LOG_WARNING` | Collects warning-level messages and more severe events, including alerts and emergencies. |
+| Port 514 | Standard port used by Syslog services in this lab. |
+| `netstat -lnptv` | Verifies listening network services, including rsyslog/syslog-ng. |
+| `azcmagent show` | Confirms Azure Arc status; expected state is `Connected`. |
