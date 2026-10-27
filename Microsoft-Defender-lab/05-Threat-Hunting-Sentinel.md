@@ -1118,3 +1118,690 @@ Evaluate detection sensitivity
 | Flighting rules | Test copies of Production rules that allow threshold tuning. |
 | Threshold of 1 | Increases anomaly-detection sensitivity and can generate more findings. |
 | Shared environment | Another learner may have already created a Flighting copy, requiring review-only completion. |
+
+# Learning Path 8 — Lab 1, Exercise 4  
+## Prepare to Perform Simulated Attacks
+
+## Purpose
+
+Prepare a non-Azure Windows server for simulated attack activity and connect its Windows Security event logs to Microsoft Sentinel.
+
+This exercise also explains the attacks that will be run later and introduces the detection-development cycle:
+
+```text
+Generate activity
+> Collect logs
+> Write KQL query
+> Create analytics rule
+> Generate alert and incident
+> Investigate and tune detection
+```
+
+> **Lab note:** This is a shared, standalone environment. Coordinate with other learners before changing shared resources. Leaving the lab may require repeating the configuration.
+
+***
+
+# Key Concepts
+
+| Term | Meaning |
+|---|---|
+| Azure Arc | Azure service that manages servers outside Azure, including on-premises servers and servers in other clouds. |
+| Azure Arc Connected Machine agent | Agent installed on a non-Azure system to connect it to Azure Arc. |
+| `azcmagent` | Command-line tool used to connect, disconnect, and verify Azure Arc status. |
+| Data Collection Rule (DCR) | Configuration that defines which machines send logs and which logs are collected. |
+| Azure Monitor Agent (AMA) | Agent that collects monitoring and security data from a device. |
+| Persistence | Attacker technique that keeps malicious code running after reboot or user logon. |
+| Privilege escalation | Attacker technique used to gain higher permissions, such as local administrator rights. |
+| Command and Control (C2) | Communication channel used by an attacker to control compromised systems. |
+| DNS tunneling / DNS C2 | Misuse of DNS queries to communicate with attacker-controlled infrastructure or transfer data. |
+| KQL | Query language used to hunt through and analyze Microsoft Sentinel log data. |
+| Analytics rule | Detection logic that turns matching log activity into alerts and incidents. |
+
+***
+
+# Task 1 — Connect WINServer to Azure Arc
+
+## Goal
+
+Confirm that `WINServer` is connected to Azure Arc. If it is not, remove any stale Azure resource and reconnect the server.
+
+## Check Connection Status
+
+1. Sign in to:
+
+```text
+WINServer
+```
+
+2. Use the provided `Administrator` credentials.
+
+3. Open an elevated Command Prompt:
+
+```text
+Search
+> cmd
+> Right-click Command Prompt
+> Run as administrator
+```
+
+4. Run:
+
+```cmd
+azcmagent show
+```
+
+5. Check the output.
+
+Expected result:
+
+```text
+Agent status: Connected
+```
+
+> If the status is **Connected**, do not make changes. Continue to Task 2.
+
+<img width="1908" height="1002" alt="image" src="https://github.com/user-attachments/assets/3513b406-3e12-4230-a10e-554564e440e1" />
+
+## Reconnect WINServer If Needed
+
+Perform these steps only if the Azure Arc agent is **not connected**.
+
+1. Open the Azure portal:
+
+```text
+https://portal.azure.com
+```
+
+2. Open the resource group:
+
+```text
+SentinelStatic
+```
+
+3. Check whether `WINServer` is listed as a resource.
+
+4. If it is listed, select it and delete it.
+
+5. Return to the elevated Command Prompt on `WINServer`.
+
+6. Force the local agent to disconnect:
+
+```cmd
+azcmagent disconnect --force-local-only
+```
+
+7. Connect the machine to Azure Arc:
+
+```cmd
+azcmagent connect -g "cloud-shell" -l "CentralUS" -s "35136189-e83d-4247-89ae-e04b3cc124b0"
+```
+
+> Replace the subscription ID with the one supplied in the lab **Resources** tab. Keep the quotation marks.
+
+8. If prompted to choose a browser, select:
+
+```text
+Microsoft Edge
+```
+
+9. Sign in using the lab tenant account, password, or TAP.
+
+10. Wait for the authentication-complete message, close the browser tab, and return to Command Prompt.
+
+11. Verify the new connection:
+
+```cmd
+azcmagent show
+```
+
+12. Confirm:
+
+```text
+Agent status: Connected
+```
+***
+
+# Task 2 — Connect WINServer to Microsoft Sentinel
+
+## Goal
+
+Create a Data Collection Rule that collects all Windows Security events from the Azure Arc-connected `WINServer` machine.
+
+## Open the Connector
+
+1. Sign in to `WIN1` as `Admin`.
+
+2. Open Microsoft Defender XDR:
+
+```text
+https://security.microsoft.com
+```
+
+3. Sign in with the provided tenant credentials or TAP.
+
+4. Navigate to:
+
+```text
+Microsoft Sentinel
+> Configuration
+> Data connectors
+```
+
+5. Search for:
+
+```text
+Windows Security Events via AMA
+```
+
+6. Select the connector and choose:
+
+```text
+Open connector page
+```
+
+The Windows Security Events solution includes:
+
+| Content | Quantity |
+|---|---:|
+| Windows Security Events via AMA connector | 1 |
+| Security Events via Legacy Agent connector | 1 |
+| Workbooks | 2 |
+| Analytics rules | 20 |
+| Hunting queries | 43 |
+
+## Create the Data Collection Rule
+
+1. Under **Configuration**, select:
+
+```text
+Create data collection rule
+```
+
+2. Enter a unique rule name:
+
+```text
+WIN[Student-ID]DCR
+```
+
+Example:
+
+```text
+WIN66677890DCR
+```
+
+3. Select:
+
+```text
+Next: Resources
+```
+
+4. Expand the subscription under **Scope**.
+
+5. Expand:
+
+```text
+cloud-shell
+```
+
+6. Select:
+
+```text
+WINServer
+```
+
+7. Select:
+
+```text
+Next: Collect
+```
+
+8. Keep the default setting:
+
+```text
+All Security Events
+```
+
+9. Select:
+
+```text
+Next: Review + create
+```
+
+10. Wait for validation to pass.
+
+11. Select:
+
+```text
+Create
+```
+
+The DCR deploys the Azure Monitor Agent configuration needed to collect Windows Security events from the Azure Arc-enabled server.
+
+<img width="1882" height="824" alt="image" src="https://github.com/user-attachments/assets/08ea4c3c-4e3c-41b3-8c52-52017ece3e30" />
+<img width="1883" height="853" alt="image" src="https://github.com/user-attachments/assets/3895aadf-a8f5-4883-935d-4e354d45f1dd" />
+
+***
+
+# Task 3 — Understand the Simulated Attacks
+
+## Important
+
+Do **not** run these commands in this exercise. They are reviewed now and will be executed in the next exercise.
+
+The simulated techniques are based on the open-source **Atomic Red Team** project, which provides small, focused tests mapped to known adversary behaviors.
+
+***
+
+## Attack 1 — Registry Run Key Persistence
+
+### Objective
+
+Create a Registry Run key that causes a program to launch every time the current user signs in.
+
+### Command
+
+```cmd
+REG ADD "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Run" /V "SOC Test" /t REG_SZ /F /D "C:\temp\startup.bat"
+```
+
+### What It Does
+
+| Component | Meaning |
+|---|---|
+| `REG ADD` | Adds or modifies a Windows Registry value. |
+| `HKCU` | Current user’s Registry hive. |
+| `...\CurrentVersion\Run` | Registry location used to start programs at user logon. |
+| `SOC Test` | Name of the created Registry value. |
+| `REG_SZ` | String data type. |
+| `C:\temp\startup.bat` | Program or script configured to run at logon. |
+
+This simulates a persistence technique: an attacker adds a program to a Run key so it launches after the user logs in.
+
+***
+
+## Attack 2 — Create and Elevate a User Account
+
+### Objective
+
+Create a new local user account, set a password, and add it to the local Administrators group.
+
+### Commands
+
+```cmd
+net user theusernametoadd /add
+```
+
+```cmd
+net user theusernametoadd ThePassword1!
+```
+
+```cmd
+net localgroup administrators theusernametoadd /add
+```
+
+### What It Does
+
+| Command | Effect |
+|---|---|
+| `net user ... /add` | Creates a local user account. |
+| `net user ... password` | Sets the user’s password. |
+| `net localgroup administrators ... /add` | Adds the user to the local Administrators group. |
+
+This simulates account creation and privilege escalation, allowing an attacker to retain privileged access using a newly created account.
+
+***
+
+## Attack 3 — DNS-Based Command and Control Simulation
+
+### Objective
+
+Generate a large number of DNS TXT queries to simulate possible C2 communication or DNS tunneling behavior.
+
+### Script Behavior
+
+The PowerShell script:
+
+- Uses a target domain, by default:
+
+```text
+microsoft.com
+```
+
+- Generates random subdomains.
+- Sends DNS queries of type:
+
+```text
+TXT
+```
+
+- Uses configurable timing and jitter.
+- Runs for a defined duration.
+- Creates a repeated DNS-query pattern designed to trigger threshold-based detections.
+
+### Key Parameters
+
+| Parameter | Default value | Meaning |
+|---|---:|---|
+| `Domain` | `microsoft.com` | Target domain for generated queries. |
+| `QueryType` | `TXT` | DNS record type requested. |
+| `C2Interval` | `8` seconds | Base delay between queries. |
+| `C2Jitter` | `20` | Random variation added to the timing. |
+| `RunTime` | `240` minutes | Maximum execution time. |
+
+> The script is a controlled simulation for detection testing. Do not run it outside the authorized lab environment.
+
+***
+
+# Task 4 — Understand Detection Modeling
+
+## Goal
+
+Understand the iterative process used to turn simulated activity into effective Sentinel detections.
+
+```text
+1. Generate known activity on a host
+        |
+        v
+2. Confirm that logs are collected
+        |
+        v
+3. Explore events with KQL
+        |
+        v
+4. Build an analytics rule
+        |
+        v
+5. Trigger alerts and incidents
+        |
+        v
+6. Investigate the incident
+        |
+        v
+7. Tune rule logic, thresholds, entities, and investigation fields
+```
+
+## Detection-Modeling Process
+
+| Phase | Analyst activity | Purpose |
+|---|---|---|
+| Generate | Perform a controlled simulated attack. | Produce known activity to detect. |
+| Collect | Confirm the endpoint logs are reaching Sentinel. | Ensure reliable data is available. |
+| Hunt | Build and test a KQL query. | Identify useful evidence and detection logic. |
+| Detect | Convert the KQL query into an analytics rule. | Generate alerts when activity reoccurs. |
+| Investigate | Review alerts, incidents, entities, and evidence. | Decide whether the activity is malicious or benign. |
+| Tune | Adjust query logic, thresholds, scheduling, grouping, and entity mapping. | Improve detection quality and reduce false positives. |
+
+> Lab alerts may trigger faster than normal operational detections so you can observe the full attack-to-investigation cycle in a short lab period.
+
+***
+
+# Key Takeaways
+
+| Topic | Key Point |
+|---|---|
+| Azure Arc | Makes the on-premises-style `WINServer` manageable through Azure. |
+| `azcmagent show` | Verifies whether the Azure Arc agent is connected. |
+| DCR | Defines the log source and the event types collected from `WINServer`. |
+| AMA | Collects Windows Security event data for Microsoft Sentinel. |
+| Registry Run key | Common persistence location used to launch programs at user logon. |
+| New local admin account | Represents account creation and privilege escalation behavior. |
+| DNS C2 simulation | Generates unusual DNS activity that can be detected using volume, timing, or domain patterns. |
+| Detection modeling | Iterative process of generating data, writing KQL, creating detections, investigating, and tuning. |
+
+# Learning Path 8 — Lab 1, Exercise 5  
+## Conduct Simulated Attacks
+
+## Purpose
+
+Run controlled attack simulations on `WINServer` so Microsoft Sentinel can later detect, alert on, and support investigation of the generated activity.
+
+The exercises simulate three common attacker behaviors:
+
+1. **Persistence** through a Windows Registry Run key.
+2. **Privilege escalation** through a new local administrator account.
+3. **Command and control (C2)** behavior through repeated DNS TXT queries.
+
+> **Lab note:** Perform these actions only in the authorized lab environment. The DNS simulation must remain running because later exercises use its generated logs.
+
+***
+
+# Environment
+
+| Item | Value |
+|---|---|
+| Target system | `WINServer` |
+| Required state | Connected to Azure Arc and configured with Azure Monitor Agent / Windows event collection |
+| Account | `Admin` / Administrator, using lab-provided credentials |
+| Purpose of generated events | Create logs for Sentinel detections, alerts, investigations, and later threat hunting |
+
+***
+
+# Task 1 — Persistence Attack Using Registry Run Key
+
+## Goal
+
+Create a Registry Run key that causes a batch-file path to launch whenever the current user signs in.
+
+Registry Run keys are commonly used by attackers to maintain persistence after a reboot or user logon.
+
+## Restart WINServer
+
+1. On `WINServer`, select:
+
+```text
+Start
+> Power
+> Restart
+```
+
+2. Wait for the computer to restart.
+3. Sign in again using the lab credentials.
+
+> The lab save functionality can disconnect `WINServer` from Azure Arc. Restarting the system restores the required connection state.
+
+## Open an Elevated Command Prompt
+
+1. In the taskbar search box, type:
+
+```text
+Command
+```
+
+2. Right-click **Command Prompt**.
+
+3. Select:
+
+```text
+Run as administrator
+```
+
+4. Select **Yes** in the User Account Control prompt.
+
+## Create the Working Folder
+
+Run the following commands, pressing Enter after each line:
+
+```cmd
+cd \
+mkdir temp
+cd temp
+```
+
+This creates and opens:
+
+```text
+C:\temp
+```
+
+## Add the Registry Run Key
+
+Run:
+
+```cmd
+REG ADD "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Run" /V "SOC Test" /t REG_SZ /F /D "C:\temp\startup.bat"
+```
+
+## What the Command Does
+
+| Element | Meaning |
+|---|---|
+| `REG ADD` | Adds or modifies a Windows Registry value. |
+| `HKCU` | Current user Registry hive. |
+| `...\CurrentVersion\Run` | Location that starts configured programs at user logon. |
+| `SOC Test` | Name assigned to the Registry value. |
+| `REG_SZ` | String value type. |
+| `C:\temp\startup.bat` | Path configured to run when the user signs in. |
+| `/F` | Forces overwrite without an additional confirmation prompt. |
+
+***
+
+# Task 2 — Privilege Elevation Through User Creation
+
+## Goal
+
+Create a new local account, configure its password, and add it to the local Administrators group.
+
+This simulates an attacker establishing an alternative privileged account.
+
+## Run the Commands
+
+In the same elevated Command Prompt, run:
+
+```cmd
+net user theusernametoadd /add
+```
+
+```cmd
+net user theusernametoadd ThePassword1!
+```
+
+```cmd
+net localgroup administrators theusernametoadd /add
+```
+
+> Replace `theusernametoadd` only if the lab instructions or shared-environment guidance requires a unique account name.
+
+## What the Commands Do
+
+| Command | Effect |
+|---|---|
+| `net user ... /add` | Creates a new local user account. |
+| `net user ... ThePassword1!` | Sets the password for the new account. |
+| `net localgroup administrators ... /add` | Adds the account to the local Administrators group. |
+
+This activity should generate Windows security evidence associated with local account management and group-membership changes.
+
+<span style="color:red">[Screenshot placeholder: Local user account created successfully.]</span>
+
+<span style="color:red">[Screenshot placeholder: New account added to the local Administrators group.]</span>
+
+***
+
+# Task 3 — Command and Control Simulation with DNS
+
+## Goal
+
+Create and run a PowerShell script that generates repeated DNS TXT requests with randomized subdomains.
+
+This simulates a possible DNS-based command-and-control pattern. The script is expected to generate some DNS resolution errors; those errors are normal in this lab.
+
+## Create the PowerShell Script
+
+In Command Prompt, run:
+
+```cmd
+notepad c2.ps1
+```
+
+1. When prompted, select **Yes** to create a new file.
+2. Paste the lab-provided PowerShell DNS simulation script into `c2.ps1`.
+3. Verify the pasted script is complete.
+4. In Notepad, select:
+
+```text
+File
+> Save
+```
+
+5. Keep the file as:
+
+```text
+C:\temp\c2.ps1
+```
+
+<img width="1908" height="969" alt="image" src="https://github.com/user-attachments/assets/44a374b6-61ca-4a91-ac7c-ca0d7235beda" />
+
+## Start the DNS Simulation
+
+Return to the elevated Command Prompt and run:
+
+```cmd
+Start PowerShell.exe -file c2.ps1
+```
+
+The command starts a separate PowerShell process in the background.
+
+Expected behavior:
+
+- The script sends repeated DNS TXT queries.
+- Randomized subdomains make queries appear distinct.
+- Query timing includes jitter so the requests do not occur at exactly fixed intervals.
+- DNS resolution errors may appear and are expected.
+- The script runs for the configured duration, allowing logs to accumulate.
+
+> **Do not close the Command Prompt or PowerShell windows.** Leave the script running while you continue to later exercises.
+
+***
+
+# DNS Simulation Behavior
+
+| Setting | Default value | Purpose |
+|---|---:|---|
+| Domain | `microsoft.com` | Base domain used to construct DNS queries. |
+| Query type | `TXT` | DNS record type requested. |
+| Base interval | `8` seconds | Base delay between requests. |
+| Jitter | `20` | Random timing variation around the base interval. |
+| Runtime | `240` minutes | Maximum time for the simulation to run. |
+| Random subdomains | Random numeric values | Creates many different query names for detection testing. |
+
+```text
+WINServer
+    |
+    | Registry Run key added
+    v
+Windows Security events
+    |
+    | Local user created and added to Administrators
+    v
+Windows Security events
+    |
+    | Repeated randomized DNS TXT queries
+    v
+DNS / network telemetry
+    |
+    v
+Microsoft Sentinel detections and investigations
+```
+
+***
+
+# Attack-to-Detection Mapping
+
+| Simulated behavior | Intended security concept | Likely investigation focus |
+|---|---|---|
+| Registry Run key creation | Persistence | Registry modification, autorun location, initiating account and process |
+| New local administrator account | Account creation and privilege escalation | New account name, account-management events, group-membership change |
+| Repeated DNS TXT queries | Command and control / DNS anomaly | Query volume, unusual subdomains, query type, timing, source host |
+
+***
+
+# Key Takeaways
+
+| Topic | Key Point |
+|---|---|
+| Registry persistence | Run keys can cause a program or script to launch at user sign-in. |
+| Local administrator creation | Attackers may create and elevate accounts to retain privileged access. |
+| DNS C2 simulation | Repeated DNS TXT queries can resemble command-and-control communication patterns. |
+| Expected errors | DNS resolution errors from the simulation are expected. |
+| Ongoing execution | Keep the DNS simulation running to generate logs for later labs. |
+| Sentinel value | Generated security events provide known data for creating and validating detections. |
