@@ -46,7 +46,6 @@ https://security.microsoft.com
 
 4. Sign in with the tenant credentials or Temporary Access Pass (TAP).
 
-<span style="color:red">[Screenshot placeholder: Microsoft Defender XDR portal opened and signed in.]</span>
 
 ## Find the Playbook Template
 
@@ -88,7 +87,7 @@ Incident tasks - Microsoft Defender XDR Ransomware Playbook for SecOps
 Create playbook
 ```
 
-<span style="color:red">[Screenshot placeholder: Sentinel SOAR Essentials solution and ransomware playbook template selected.]</span>
+<img width="1911" height="969" alt="image" src="https://github.com/user-attachments/assets/ee8cf3e2-ad90-4d61-a0b7-3c3f5658f821" />
 
 ## Configure and Deploy
 
@@ -105,6 +104,7 @@ Defender_XDR_Ransomware_Playbook_SecOps_Tasks
 ```
 
 > The template’s default name exceeds the 64-character limit; removing `for` and extra underscores makes it valid.
+<img width="1905" height="827" alt="image" src="https://github.com/user-attachments/assets/ee93b871-9fbd-4c25-9298-2814c85875da" />
 
 3. Select:
 
@@ -131,11 +131,9 @@ Close and go to playbook
 
 This opens the playbook in the Azure Logic App designer.
 
-<span style="color:red">[Screenshot placeholder: Playbook configuration with SentinelStatic resource group and corrected playbook name.]</span>
+<img width="1899" height="836" alt="image" src="https://github.com/user-attachments/assets/1b32c5da-253c-4d71-8ff1-b975959cdb34" />
+        <img width="1894" height="873" alt="image" src="https://github.com/user-attachments/assets/7b95e8de-cc22-4c8c-8640-9e9f37523f3c" />
 
-<span style="color:red">[Screenshot placeholder: Successful playbook deployment.]</span>
-
-<span style="color:red">[Screenshot placeholder: Defender_XDR_Ransomware_Playbook_SecOps_Tasks opened in the Logic App designer.]</span>
 
 ***
 
@@ -224,11 +222,7 @@ Publish
 
 8. Close the designer window.
 
-<span style="color:red">[Screenshot placeholder: Microsoft Sentinel incident trigger selected in Logic App designer.]</span>
-
-<span style="color:red">[Screenshot placeholder: New Sentinel connection authenticated with student account.]</span>
-
-<span style="color:red">[Screenshot placeholder: Trigger block showing “Connected to [student username]”.]</span>
+<img width="1889" height="871" alt="image" src="https://github.com/user-attachments/assets/b4082dd3-e0b3-4eb7-b2cb-75a7741c3c7b" />
 
 ***
 
@@ -309,13 +303,7 @@ Apply
 
 The rule-creation window should close automatically.
 
-<span style="color:red">[Screenshot placeholder: Automation rule configured with “When an incident is created” trigger.]</span>
-
-<span style="color:red">[Screenshot placeholder: Tactics condition showing the selected tactic values.]</span>
-
-<span style="color:red">[Screenshot placeholder: Run playbook action with ransomware playbook selected.]</span>
-
-<span style="color:red">[Screenshot placeholder: Completed automation rule displayed in Sentinel Automation.]</span>
+<img width="1894" height="863" alt="image" src="https://github.com/user-attachments/assets/df19c9a6-9264-4615-820e-9d4a44e7c819" />
 
 ***
 
