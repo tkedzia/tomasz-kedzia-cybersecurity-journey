@@ -789,3 +789,332 @@ Automation rule assigns the incident to the Tier 2 student account
 | Automation rule | Automatically assigns the created incident to the selected owner. |
 | Cloud Shell test | Creating Cloud Shell storage generates Azure Activity operations targeted by the detection. |
 | Investigation | Incidents provide the title, severity, owner, status, alerts, and evidence needed for SOC triage. |
+
+# Learning Path 8 — Lab 1, Exercise 3  
+## Explore Entity Behavior Analytics
+
+## Purpose
+
+Explore **User and Entity Behavior Analytics (UEBA)** and anomaly-detection rules in Microsoft Sentinel.
+
+UEBA helps security analysts identify unusual behavior by comparing activity against expected patterns for users, hosts, IP addresses, and other entities. Anomaly rules highlight behavior that may require investigation, even when it does not match a known attack signature.
+
+> **Lab note:** This is a standalone environment. Leaving before completion may require you to repeat the configuration.
+
+***
+
+# Key Concepts
+
+| Term | Meaning |
+|---|---|
+| UEBA | User and Entity Behavior Analytics; identifies unusual behavior involving users and entities. |
+| Entity | An item involved in security activity, such as a user account, host, IP address, file, or process. |
+| Anomaly | Activity that differs significantly from established or expected behavior. |
+| Anomaly rule | A Sentinel analytics rule that detects unusual behavior using analytics models. |
+| Production mode | Standard, active anomaly rule mode used for operational detections. |
+| Flighting mode | Testing mode used to evaluate and tune a copy of an anomaly rule. |
+| Anomaly score threshold | Sensitivity level that determines how unusual behavior must be before it is reported. |
+| Connected data source | A log source supplying the data required for UEBA analysis. |
+
+***
+
+# Task 1 — Explore UEBA
+
+## Goal
+
+Verify that UEBA is enabled, review its connected data sources, and confirm that anomaly detection is enabled for the Sentinel workspace.
+
+## Access Microsoft Sentinel Settings
+
+1. Sign in to `WIN1` as `Admin`.
+2. Open Microsoft Edge.
+3. Navigate to:
+
+```text
+https://security.microsoft.com
+```
+
+4. Sign in using the lab tenant credentials or Temporary Access Pass (TAP).
+
+5. In the Microsoft Defender navigation menu, expand:
+
+```text
+System
+```
+
+6. Select:
+
+```text
+Settings
+> Microsoft Sentinel
+```
+
+## Review UEBA Status
+
+1. In the Microsoft Sentinel settings area, select:
+
+```text
+UEBA
+```
+
+2. On the **UEBA** tab, confirm that UEBA is enabled.
+
+3. Review the connected data sources that provide telemetry for behavior analytics.
+
+> UEBA depends on ingested data. More relevant data sources generally provide richer entity context and stronger behavior analysis.
+
+## Confirm Anomaly Detection
+
+1. At the top of the Microsoft Sentinel settings menu, select:
+
+```text
+SIEM workspaces
+> sentinelworkspace-01
+```
+
+2. Scroll down and expand:
+
+```text
+Anomalies
+```
+
+3. Read the anomaly-information section.
+
+4. Confirm that:
+
+```text
+Detect Anomalies: On
+```
+
+5. Select:
+
+```text
+Configure anomalies in analytics
+```
+
+This opens the **Analytics > Anomalies** tab.
+
+***
+
+# Task 2 — Review Anomaly Rules
+
+## Goal
+
+Confirm anomaly rules are enabled and compare **Production** and **Flighting** rule behavior.
+
+## Confirm Rule Status
+
+1. On the **Analytics** page, open:
+
+```text
+Anomalies
+```
+
+2. Review the **Status** column.
+
+3. Confirm that anomaly rules show:
+
+```text
+Enabled
+```
+
+## Select an Eligible Production Rule
+
+1. Find an enabled rule whose name indicates:
+
+```text
+Production
+```
+
+2. Use the search bar to confirm there is no corresponding rule with the same base name beginning with:
+
+```text
+FLGT
+```
+
+3. Select the eligible Production rule.
+
+4. Select:
+
+```text
+Edit
+```
+
+> Only one Production rule and one Flighting copy of the same rule can exist at a time. In a shared lab environment, every Production rule may already have an existing `FLGT` copy. If so, complete this task as a review-only exercise.
+
+## Review Production Mode
+
+1. On the **General** tab, verify:
+
+```text
+Mode: Production
+```
+
+2. Select:
+
+```text
+Next: Configuration
+```
+
+3. Review the configuration.
+
+4. Confirm that the **Anomaly score threshold** cannot be changed in Production mode.
+
+5. Select:
+
+```text
+Cancel
+```
+
+to exit the rule wizard without modifying the Production rule.
+
+***
+
+# Duplicate the Rule for Flighting
+
+## Goal
+
+Create a Flighting copy of an eligible Production rule so its anomaly threshold can be tested.
+
+1. Find the Production rule reviewed previously.
+
+2. Scroll right, select the ellipsis menu:
+
+```text
+...
+```
+
+3. Select:
+
+```text
+Duplicate
+```
+
+4. Scroll left and locate the newly created rule.
+
+5. Confirm that its name begins with:
+
+```text
+FLGT
+```
+<img width="1887" height="860" alt="image" src="https://github.com/user-attachments/assets/90d1e1d9-3a8e-4dc5-9e02-abc599f17bc0" />
+
+***
+
+# Configure Flighting Mode
+
+## Goal
+
+Review the editable anomaly-score threshold in a Flighting rule and set it to `1`.
+
+1. Select the new:
+
+```text
+FLGT...
+```
+
+rule.
+
+2. Select:
+
+```text
+Edit
+```
+
+3. On the **General** tab, confirm:
+
+```text
+Mode: Flighting
+```
+
+4. Select:
+
+```text
+Next: Configuration
+```
+
+5. Confirm that the **Anomaly score threshold** can be edited.
+
+6. Set the threshold to:
+
+```text
+1
+```
+
+7. Select:
+
+```text
+Next: Submit Feedback
+> Next: Review and Create
+> Save
+```
+
+A lower threshold increases sensitivity, meaning more unusual activities may be reported. This can improve visibility during testing but may also create more alerts for analysts to review.
+
+***
+
+# Clean Up the Test Rule
+
+## Goal
+
+Delete the temporary Flighting rule created for testing.
+
+1. Locate the `FLGT` rule created in this exercise.
+
+2. Select its ellipsis menu:
+
+```text
+...
+```
+
+3. Select:
+
+```text
+Delete
+```
+
+4. Confirm the deletion.
+
+> Skip this step if no eligible Production rule was available and the task was completed as a review-only walkthrough.
+
+***
+
+# Production vs Flighting
+
+| Feature | Production Rule | Flighting Rule |
+|---|---|---|
+| Purpose | Operational anomaly detection | Testing and tuning anomaly detection |
+| Mode | `Production` | `Flighting` |
+| Anomaly threshold | Locked / not editable | Editable |
+| Recommended use | Regular SOC monitoring | Testing detection sensitivity before operational use |
+| Relationship | Primary operational version | Test copy associated with a Production rule |
+
+```text
+Production anomaly rule
+        |
+        | Duplicate
+        v
+FLGT anomaly rule
+        |
+        | Adjust anomaly score threshold
+        v
+Evaluate detection sensitivity
+        |
+        +-- Keep and promote if appropriate
+        |
+        +-- Delete after testing
+```
+
+***
+
+# Key Takeaways
+
+| Topic | Key Point |
+|---|---|
+| UEBA | Identifies unusual behavior involving users and entities. |
+| Data sources | UEBA requires connected log sources to build useful behavior context. |
+| Detect Anomalies | Must be enabled to use anomaly analytics. |
+| Production rules | Used for active, operational anomaly detection; thresholds are protected from direct editing. |
+| Flighting rules | Test copies of Production rules that allow threshold tuning. |
+| Threshold of 1 | Increases anomaly-detection sensitivity and can generate more findings. |
+| Shared environment | Another learner may have already created a Flighting copy, requiring review-only completion. |
