@@ -1,5 +1,6 @@
 # Microsoft Sentinel Threat Hunting  
 ## Learning Path 09 — Lab 1, Exercise 1
+<img width="1280" height="720" alt="image" src="https://github.com/user-attachments/assets/d184666c-bb6b-4fcb-b18b-b9d5201dc60a" />
 
 > **Scenario:** As a Security Operations Analyst, investigate suspected Command and Control (C2) activity and build repeatable hunting capability in Microsoft Sentinel through the Microsoft Defender portal. The lab uses a standalone shared environment; leaving it can require repeating the setup.
 
@@ -11,7 +12,7 @@
 - Create a one-time Data Lake KQL job to aggregate potential C2 activity.
 - Use the MITRE ATT&CK map to create a multi-query hunt around a tactic or technique.
 
-> **Key idea:** Threat hunting begins with a hypothesis, queries relevant telemetry, evaluates results, and either validates or invalidates the hypothesis. The lab’s generated PowerShell activity gives a known pattern to investigate. [ppl-ai-file-upload.s3.amazonaws](https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/attachments/1668271348/97411790-72e2-4e36-b416-85f1647fb365/Cyber-Security_Technical-Tutoring-Tomasz-Kedzia-6.docx?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Checksum-Mode=ENABLED&X-Amz-Credential=ASIA2F3EMEYEZSWIGNZZ%2F20261028%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261028T074112Z&X-Amz-Expires=3088&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEDgaCXVzLWVhc3QtMSJHMEUCIFnwToZZNX0SJYwMQZeTwKeCWU9tPrr%2BJJYMWZ9zoEJsAiEAw3%2FrnPNxaGW5o7TTkPAx6HZutY7ethk4XrGXekei5s0qgAUIABABGgw2OTk3NTMzMDk3MDUiDPl8n26mXPFJU435ZCrdBK9yF2gxJN9ZOPDoPw%2FLJuCGXbUWnZ7D1cfLsvhS%2FPB5QPTiO9T2bzgM2Do1M1Fj2VjOuaS1HOiUe2ZizbkxjIC6Gd18xxssc5TuU7KtVXiczVm5dJqvN19oQk5Y7ERSLXYfRNmat0FjebeZQJpBOHk2zm0GlRsNjHpMQ6uqME846BJ3LT7xq1NLlJOEQSCgU3OPmIwDeb%2BKqTS%2FKLYZzNvLNvCURE1BLrv3h9KzC8cZ194mLyZQCafncJ6OwluhNj8C%2BN3u9ZKKdad3dbKMW22UJwM48hbIn2d9ZA2d5Mr7NbFPtTkt1Bs0oDrfpbVGnrM943jm5ZluTVnFLjxLX927uAS%2BJ2Zfolsq2AioKftDZRaJpda%2FgT%2FfOfjpw4bdE5Oq9OY5MLo%2Blr%2BMeYhC4vLQ5fUyXNr6gVZSQcxsPyP8Z0sh43Cf3D2pqEF0JBPhdBxjw0elzeGKnUOJjExsjBDytvaIpJ20kVkg8kvyPFcOJ57wKbBoDYQKAQIogUvY6hd0YiersY%2BIv%2FUpRk99oVVhvsrQk9Zn5yFd3U42vdxThqvJrcWVYDPPNK280nKj7MoUf%2FPTN4nzpa2RDmBA%2F0%2BV2AKajOaZ%2Fup1jsJ3zPMK1Kn7rnCuSi%2B8yBG2KZEYyqnooMpbtEKx9VSJHSZxUQ0RQrDCFKMMSLfjIZjtlNC%2BI8q1vznPpE4oVS7NoShP%2BkhNQ1unB%2B2ST2b2wOav%2FFz10DSQCyPelXklDRPMz3nP0VlOtnCAX0ITJrLz4KycOzB%2BAUIyHcM352febfcNMxCck4jMcubgwzrhGvXGMNXKhtcGOpgBYtZTwxshzbHgtRVzz4aJmUeXUr4BNGlkwODeQBfo1eI7RE2oGRlghpIa9A1Ja%2BLoJ3gyb4VwJvzDJidbAmuzY%2FA6OAof59o9%2BnTG3mDudb6BpwJwczTgHs9HTNHx8ASI%2FrdfmPvEdbYZfei4J%2FcFIHlVldAxBw%2Fu4A%2F0ocxxnuUCj8bDXlQ2xsJ3wZ5KdVAFXT1sdpLkOjk%3D&X-Amz-SignedHeaders=host&x-id=GetObject&X-Amz-Signature=c3fcd7c651b1b21f9a10fc9b33fd3b68c8916c7e0fc2bb5eca0f1755ceb39808)
+> **Key idea:** Threat hunting begins with a hypothesis, queries relevant telemetry, evaluates results, and either validates or invalidates the hypothesis. The lab’s generated PowerShell activity gives a known pattern to investigate.
 
 ***
 
@@ -31,11 +32,7 @@ The following components are preconfigured, but understanding them helps explain
 
 > The C2 simulation can produce expected DNS resolution failures. Keep the PowerShell process running so telemetry continues to accumulate for hunting.
 
-<span style="color:red">[Screenshot placeholder: WINServer Azure Arc agent status showing Connected.]</span>
-
-<span style="color:red">[Screenshot placeholder: Data Collection Rule configured for WINServer with All Security Events selected.]</span>
-
-<span style="color:red">[Screenshot placeholder: Command Prompt or PowerShell window showing c2.ps1 running.]</span>
+<img width="1905" height="917" alt="image" src="https://github.com/user-attachments/assets/e720138c-5b81-480b-a780-37ebfcffd402" />
 
 ***
 
