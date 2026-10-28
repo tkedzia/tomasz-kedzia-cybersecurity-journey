@@ -4,3 +4,6 @@ Learning Path 1 - Lab 1 - Exercise 1 - Explore Microsoft Defender XDR
 Learning Path 2 - Lab 1 - Exercise 1 - Explore Microsoft Security Copilot
 
 Learning Path 3 - Lab 1 - Exercise 1 - Explore Microsoft Purview Audit logs
+
+Learning Path 4 - Lab 1 - Exercise 1 - Deploy Microsoft Defender for Endpoint
+<img width="1280" height="720" alt="image" src="https://github.com/user-attachments/assets/049b1a38-3750-46cf-a41d-8dd141b91559" />
