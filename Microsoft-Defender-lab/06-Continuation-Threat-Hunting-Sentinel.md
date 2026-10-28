@@ -63,7 +63,7 @@ Investigation & Response
 
 > Paste KQL into Notepad first, then copy it into the query editor to avoid formatting errors.
 
-<span style="color:red">[Screenshot placeholder: Microsoft Defender portal with Advanced hunting open.]</span>
+<img width="1905" height="893" alt="image" src="https://github.com/user-attachments/assets/69a98a81-f6f6-4dee-b26b-3ab458543a6e" />
 
 ## Run the PowerShell Hunt
 
@@ -75,6 +75,18 @@ SecurityEvent
 | extend PwshParam = trim(@"[^/\\]*powershell(.exe)+" , CommandLine) 
 | project TimeGenerated, Computer, SubjectUserName, PwshParam
 ```
+FIXED QUERY:
+let lookback = 2d;
+SecurityEvent
+| where TimeGenerated >= ago(lookback)
+| where EventID == 4688
+| where Process =~ "powershell.exe"
+| extend PwshParam = extract(
+    @"(?i)^\s*""?(?:[^""]*[\\/])?powershell\.exe""?(?:\s+|$)(.*)$",
+    1,
+    CommandLine
+)
+| project TimeGenerated, Computer, SubjectUserName, PwshParam
 
 ### Query Breakdown
 
@@ -95,9 +107,6 @@ SecurityEvent
 ```text
 -file c2.ps1
 ```
-
-<span style="color:red">[Screenshot placeholder: Query results showing a PowerShell command with `-file c2.ps1`.]</span>
-
 ## Create an Incident
 
 1. Select the matching result.
@@ -112,18 +121,18 @@ SecurityEvent
 4. Create a unique identifier, for example:
 
 ```text
-TK1234
+TKS1234
 ```
 
 5. Complete the incident fields:
 
 | Setting | Value |
 |---|---|
-| Alert title | `PowerShell C2 Hunt - TK1234` |
+| Alert title | `PowerShell C2 Hunt - TKS1234` |
 | Severity | High |
 | Category | Command and Control |
 | MITRE technique | `T1094: Custom Command and Control Protocol` |
-| Description | `PowerShell C2 Hunt results - TK1234` |
+| Description | `PowerShell C2 Hunt results - TKS1234` |
 | Recommended actions | `Perform incident remediation` |
 
 6. Select **Next**.
@@ -144,10 +153,6 @@ Impacted Assets
 
 9. Select **Next**.
 10. Review the summary, select **Submit**, then select **Done**.
-
-<span style="color:red">[Screenshot placeholder: Incident fields completed with unique identifier.]</span>
-
-<span style="color:red">[Screenshot placeholder: Entity mapping configured as Device / Hostname / Computer.]</span>
 
 ## Verify the Incident
 
@@ -173,7 +178,7 @@ PowerShell C2 Hunt - TK1234
 
 4. Confirm that the incident is listed.
 
-<span style="color:red">[Screenshot placeholder: PowerShell C2 Hunt incident visible in Incidents.]</span>
+<img width="1902" height="836" alt="image" src="https://github.com/user-attachments/assets/62141fc1-8061-4f09-a4c9-943b621fdf1a" />
 
 ***
 
@@ -216,8 +221,6 @@ sensitivestorageaccount
 6. Leave other filters at their default values.
 7. Select **Run**.
 
-<span style="color:red">[Screenshot placeholder: Hunting graph predefined scenario selected.]</span>
-
 ## Explore the Graph
 
 The graph displays entities and relationships relevant to access to the named storage account.
@@ -237,12 +240,6 @@ Defender for Cloud
 6. Select the **+** icon on nodes to expand the graph and explore additional relationships.
 
 > The **Attack paths** tab is populated only when multiple attacks are associated with the entity.
-
-<span style="color:red">[Screenshot placeholder: Hunting graph showing sensitivestorageaccount and connected user nodes.]</span>
-
-<span style="color:red">[Screenshot placeholder: Critical user marked with a gold crown icon.]</span>
-
-<span style="color:red">[Screenshot placeholder: Storage account details showing Defender for Cloud as discovery source.]</span>
 
 ***
 
@@ -292,8 +289,6 @@ C2ATTACKHUNT_TK
 
 7. Select **Next**.
 
-<span style="color:red">[Screenshot placeholder: New KQL job configuration with a unique custom destination table.]</span>
-
 ## Add the Query
 
 ```kql
@@ -320,8 +315,6 @@ This reduces individual events into a compact view of recurring execution patter
 10. Select **Next**.
 11. Review the settings and select **Submit**.
 12. Select **Done**.
-
-<span style="color:red">[Screenshot placeholder: KQL query added to the Data Lake job.]</span>
 
 ## Monitor and Review Results
 
@@ -351,9 +344,9 @@ C2ATTACKHUNT_TK_KQL_CL
 
 > A red wavy underline under the table name means Advanced Hunting has not yet recognized the new table. Wait several minutes and try again.
 
-<span style="color:red">[Screenshot placeholder: KQL job listed with Succeeded status.]</span>
-
-<span style="color:red">[Screenshot placeholder: Advanced Hunting results from the C2ATTACKHUNT_TK_KQL_CL table.]</span>
+<img width="1903" height="947" alt="image" src="https://github.com/user-attachments/assets/5ed63cb2-60ae-4930-9854-e8ec2e8b8b99" />
+<img width="1887" height="856" alt="image" src="https://github.com/user-attachments/assets/cc7651e0-45c3-454f-a083-2af2fec3fdab" />
+<img width="1907" height="823" alt="image" src="https://github.com/user-attachments/assets/151aab5f-5141-42fc-8d44-f60a7e831f69" />
 
 ***
 
@@ -383,10 +376,6 @@ Hunting queries
 5. In the details pane, under **Simulated coverage**, select **View** beside **Hunting queries**.
 
 This opens a filtered Hunting Queries view for the selected technique.
-
-<span style="color:red">[Screenshot placeholder: MITRE ATT&CK map filtered to Hunting queries.]</span>
-
-<span style="color:red">[Screenshot placeholder: Account Manipulation technique card selected.]</span>
 
 ## Create and Run the Hunt
 
@@ -435,10 +424,6 @@ Close the hunt
 > Mark the hypothesis as invalidated
 ```
 
-<span style="color:red">[Screenshot placeholder: New hunt created from Account Manipulation hunting queries.]</span>
-
-<span style="color:red">[Screenshot placeholder: Hunt details and query results.]</span>
-
 ## Alternative Filtering Path
 
 The same hunting focus can be reached by filtering directly:
@@ -456,8 +441,6 @@ Apply:
 |---|---|
 | Tactics | Persistence |
 | Techniques | `T1098` |
-
-<span style="color:red">[Screenshot placeholder: Hunting page filtered by Persistence and T1098.]</span>
 
 ***
 
