@@ -1,6 +1,8 @@
 # Learning Path 4 — Lab 1, Exercise 2  
 ## Mitigate Attacks with Microsoft Defender for Endpoint
 
+<img width="1280" height="720" alt="image" src="https://github.com/user-attachments/assets/e137b98e-d051-4beb-b3f4-9de2f7c10f18" />
+
 ## Purpose
 
 Validate Microsoft Defender for Endpoint onboarding, generate a safe test detection, investigate the resulting alert and incident, then classify it as authorized security testing.
