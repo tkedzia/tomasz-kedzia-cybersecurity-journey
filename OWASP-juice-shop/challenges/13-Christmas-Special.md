@@ -68,8 +68,7 @@ SQLITE_ERROR: syntax error
 This confirms that SQL injection is possible.
 
 ### Screenshot
-
-![SQLITE_ERROR syntax error](screenshots/sqlite-syntax-error.png)
+<img width="1907" height="421" alt="image" src="https://github.com/user-attachments/assets/9efe5a0f-16b8-4ee4-9140-1acaae18c433" />
 
 ---
 
