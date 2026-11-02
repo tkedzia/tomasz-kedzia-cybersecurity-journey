@@ -24,9 +24,7 @@
 
 ### Screenshot
 
-![Network tab showing GET /rest/products/search?q=](screenshots/network-search-request.png)
-
----
+<img width="1902" height="987" alt="image" src="https://github.com/user-attachments/assets/03faf176-eb08-4921-b1d5-02b3a22a1cdb" />
 
 ## 2. Verify Search Endpoint
 
