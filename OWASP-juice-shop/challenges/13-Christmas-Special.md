@@ -46,8 +46,8 @@ Expected result:
 ```
 
 ### Screenshot
+<img width="1902" height="1035" alt="image" src="https://github.com/user-attachments/assets/9b101f10-3735-4426-879d-269f895e42d1" />
 
-![JSON search results for orange](screenshots/search-orange-results.png)
 
 ---
 
