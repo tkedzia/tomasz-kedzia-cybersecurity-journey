@@ -117,8 +117,9 @@ ProductId = 10
 ```
 
 ### Screenshot
+<img width="1641" height="402" alt="image" src="https://github.com/user-attachments/assets/5af2628d-f5da-427f-8f6c-e3f62076b4ec" />
+<img width="1902" height="990" alt="image" src="https://github.com/user-attachments/assets/606ed8ce-3ac6-48dc-8ecd-387cc27272e7" />
 
-![Christmas special product in JSON response](screenshots/christmas-product-id10.png)
 
 ---
 
@@ -140,7 +141,7 @@ ProductId = 10
 
 ### Screenshot
 
-![Basket ID in Session Storage](screenshots/basket-id.png)
+<img width="1907" height="988" alt="image" src="https://github.com/user-attachments/assets/546890f7-eeed-43b1-b25d-ba7d7769b41c" />
 
 ---
 
