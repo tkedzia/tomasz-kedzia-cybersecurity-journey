@@ -147,26 +147,11 @@ ProductId = 10
 
 ## 6. Add the Hidden Product
 
-Send:
-
-```http
-POST http://localhost:3000/api/BasketItems
-Content-Type: application/json
-```
-
-Body:
-
-```json
-{
-  "BasketId": "<YOUR_BASKET_ID>",
-  "ProductId": 10,
-  "quantity": 1
-}
-```
-
 ### Screenshot
 
-![POST request adding hidden product](screenshots/add-product-10.png)
+<img width="1902" height="927" alt="image" src="https://github.com/user-attachments/assets/fcb85090-42ab-4286-ab8d-91e4f3715d85" />
+
+<img width="1906" height="990" alt="image" src="https://github.com/user-attachments/assets/5f48c2f8-5dbb-45f3-ae55-b8c6dd2b0529" />
 
 ---
 
@@ -188,8 +173,7 @@ is now present.
 
 ### Screenshot
 
-![Basket containing Christmas special](screenshots/basket-christmas-special.png)
-
+<img width="1902" height="898" alt="image" src="https://github.com/user-attachments/assets/34af05a5-65ce-431e-8535-44647d8e2e42" />
 ---
 
 ## 8. Complete the Challenge
@@ -204,7 +188,7 @@ Challenge solved.
 
 ### Screenshot
 
-![Challenge solved notification](screenshots/challenge-completed.png)
+<img width="1900" height="860" alt="image" src="https://github.com/user-attachments/assets/0e129d5b-67de-4023-b3ed-d9c66288d43a" />
 
 ---
 
