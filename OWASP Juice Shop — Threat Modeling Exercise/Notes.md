@@ -6,6 +6,9 @@ Performed an architecture-led threat-modeling exercise for OWASP Juice Shop usin
 
 **Status:** Design-review baseline completed. Threats remain hypotheses pending validation against a specific application release and deployment.
 
+## Exercise Result 
+https://tkedzia.github.io/tomasz-kedzia-cybersecurity-journey/
+
 ## Objectives
 
 - Understand the application’s architecture and security-relevant interactions.
