@@ -103,6 +103,8 @@ These are possible control patterns, not guarantees that a single product config
 
 ## 4. The anatomy of a DLP policy
 
+Example mockup of Purview DLP Policy: https://tkedzia.github.io/tomasz-kedzia-cybersecurity-journey/purview-dlp-policy/
+
 A policy expresses a protection requirement. Its rules translate that requirement into conditions and actions. In Purview, rules can also include user notifications, overrides, incident reporting and processing options.
 
 Use this structure when explaining a policy:
