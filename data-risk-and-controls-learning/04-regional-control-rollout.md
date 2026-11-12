@@ -1,8 +1,3 @@
-Below is the complete English lesson for `2026-11-11-regional-control-rollout/rollout-and-exception-scenario.md`, in one copyable Markdown block. It includes a worked regional rollout, an exception decision, stakeholder communications, and interview answers. No lab or written assignment is required.
-
-The technical rollout principles follow Microsoft’s guidance on incremental deployment through scope, policy state, and actions. Simulation provides evidence for tuning, not proof of enforcement. The governance model and scenario below are fictional teaching examples, not confirmed EY procedures. [learn.microsoft](https://learn.microsoft.com/en-us/purview/dlp-create-deploy-policy)
-
-```markdown
 # Study Notes — 11 November 2026
 # Regional Control Rollout and Exception Scenario
 
@@ -901,4 +896,3 @@ Microsoft guidance supports:
 The regional scenario, governance roles, readiness gates, exception record, communications and interview answers are teaching examples.
 
 They are not prescribed Microsoft workflows or confirmed EY procedures.
-```
