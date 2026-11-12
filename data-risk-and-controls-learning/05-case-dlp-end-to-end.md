@@ -1,8 +1,3 @@
-The **12 November** session in your plan is “DLP end-to-end case”: a 60-minute consolidation of C1, regional rollout, and C2, reported false positives disrupting work. The key test is to start with the data and business objective—not with buying a tool.
-
-Below are complete English notes in one copyable Markdown block. The worked answers replace the need for a lab or written assignment. Microsoft’s guidance supports the staged evaluation, feedback, tuning and enforcement approach used in the lesson. [learn.microsoft](https://learn.microsoft.com/en-us/purview/dlp-overview-plan-for-dlp)
-
-```markdown
 # Study Notes — 12 November 2026
 # DLP End-to-End: Regional Rollout and Reported False Positives
 
@@ -895,4 +890,3 @@ Microsoft guidance supports the technical concepts of:
 The scenario facts, report classifications, model answers, governance examples and proposed tests are teaching material.
 
 Microsoft Purview is a reference example, not evidence of EY’s technology or the meaning of Dataguard.
-```
