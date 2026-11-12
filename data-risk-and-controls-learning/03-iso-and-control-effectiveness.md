@@ -989,3 +989,5 @@ NIST assessment methods are used here as a practical learning structure. They ar
 Used for the incremental approach to policy evaluation and deployment.
 
 The test cases, ownership model, SoA entry, metrics and closure examples in this lesson are fictional teaching designs. They are not prescribed ISO forms or confirmed EY procedures.
+
+##EXTRAS: https://tkedzia.github.io/tomasz-kedzia-cybersecurity-journey/iso-control-effectiveness/
